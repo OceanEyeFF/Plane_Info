@@ -24,7 +24,7 @@ painterengine_build_platform := $(wildcard $(painterengine_path)/platform/window
 painterengine_build_painterengine_o += $(patsubst %.cpp,%.o,$(painterengine_build_platform))
 
 all:$(project_build_o)  $(painterengine_build_painterengine_o) 
-	gcc $(project_build_o) $(painterengine_build_painterengine_o) \
+	g++ $(project_build_o) $(painterengine_build_painterengine_o) \
 	-o $(target) \
 	-I "$(painterengine_path)" \
 	-I "$(project_path)" \
@@ -35,19 +35,19 @@ all:$(project_build_o)  $(painterengine_build_painterengine_o)
 	
 
 $(project_path)/%.o:$(project_path)/%.c
-	gcc -c $^ -o $@ -I "$(painterengine_path)" -I "$(painterengine_path)/platform/windows"
+	g++ -c $^ -o $@ -I "$(painterengine_path)" -I "$(painterengine_path)/platform/windows"
 
 $(painterengine_path)/architecture/%.o:$(painterengine_path)/architecture/%.c 
-	gcc -c $^ -o $@ -I "$(painterengine_path)"
+	g++ -c $^ -o $@ -I "$(painterengine_path)"
 
 $(painterengine_path)/kernel/%.o:$(painterengine_path)/kernel/%.c
-	gcc -c $^ -o $@
+	g++ -c $^ -o $@
 
 $(painterengine_path)/core/%.o:$(painterengine_path)/core/%.c
-	gcc -c $^ -o $@
+	g++ -c $^ -o $@
 
 $(painterengine_path)/platform/windows/%.o:$(painterengine_path)/platform/windows/%.c
-	gcc -c $^ -o $@ -I "$(project_path)" -I "$(painterengine_path)" -I "$(painterengine_path)/platform/windows"
+	g++ -c $^ -o $@ -I "$(project_path)" -I "$(painterengine_path)" -I "$(painterengine_path)/platform/windows"
 
 
 .PHONY:clean
