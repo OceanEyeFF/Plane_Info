@@ -1,5 +1,7 @@
 # Vim tempfiles
 *~
+*.swp
+*.un~
 
 # Prerequisites
 *.d
