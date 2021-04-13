@@ -5,7 +5,11 @@
 
 typedef struct
 {
+	PX_FontModule fontmodule;
 	PX_Runtime runtime;
+	PX_Json ui_json;
+	PX_UI ui;
+	PX_Object *ui_root;
 }PX_Application;
 
 extern PX_Application App;
