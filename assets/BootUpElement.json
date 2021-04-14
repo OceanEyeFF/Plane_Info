@@ -1,14 +1,62 @@
 {
-	"label": {
-		"id": "Test", //可选参数,控件id
-		"x": 0, //可选参数,控件x坐标,默认为0
+	"label":
+	{
+		"id": "Text1", //可选参数,控件id
+		"x": 20, //可选参数,控件x坐标,默认为0
+		"y": -100, //可选参数,控件y坐标,默认为0
+		"width": 100, //可选参数,控件宽度,默认为0
+		"height": 24, //可选参数,控件高度,默认为0
+		//"length": 112, 可选参数,控件长度,默认为0 3D控件
+		"halign": "right", //可选参数,水平对齐方式
+		"valign": "mid", //可选参数,水平垂直方式
+		"align": "center",
+		"text": "Departure",
+		"fontcolor": [255,192,192,192]
+	},
+	"selectbar":
+	{
+		"id": "departure",
+		"x" : 120,
+		"y" : -100,
+		"width": 100, //可选参数,控件宽度,默认为0
+		"height": 24,
+		"halign": "mid", //可选参数,水平对齐方式
+		"valign": "mid", //可选参数,垂直对齐方式
+		"cursorcolor":[255,32,32,32],
+		"backgroundcolor":[255,64,64,64],
+		"fontcolor": [255,192,192,192],
+		"bordercolor": [255,192,192,192],
+		"style":"round",
+		"items":[ "PEK", "PVG", "CAN", "PKX", "MFM", "SZX", "CSX", "KMG", "SWA", "HGH", "HKG", "CKG", "CTU","XIY","CGQ","NKG" ]
+	},
+	"label":
+	{
+		"id": "Text2", //可选参数,控件id
+		"x": 20, //可选参数,控件x坐标,默认为0
 		"y": 0, //可选参数,控件y坐标,默认为0
-		"width": 0, //可选参数,控件宽度,默认为0
-		"height": 100, //可选参数,控件高度,默认为0
-		"length": 100, //可选参数,控件长度,默认为0
+		"width": 100, //可选参数,控件宽度,默认为0
+		"height": 24, //可选参数,控件高度,默认为0
+		//"length": 112, 可选参数,控件长度,默认为0 3D控件
 		"halign": "mid", //可选参数,水平对齐方式
 		"valign": "mid", //可选参数,水平垂直方式
-		"text": "这是一个测试",
+		"align": "center",
+		"text": "Arrival",
 		"fontcolor": [255,192,192,192]
+	},
+	"selectbar":
+	{
+		"id": "arrival",
+		"x" : 120,
+		"y" : 0,
+		"width": 100, //可选参数,控件宽度,默认为0
+		"height": 24,
+		"halign": "mid", //可选参数,水平对齐方式
+		"valign": "mid", //可选参数,垂直对齐方式
+		"cursorcolor":[255,32,32,32],
+		"backgroundcolor":[255,64,64,64],
+		"fontcolor": [255,192,192,192],
+		"bordercolor": [255,192,192,192],
+		"style":"round",
+		"items":[ "PEK", "PVG", "CAN", "PKX", "MFM", "SZX", "CSX", "KMG", "SWA", "HGH", "HKG", "CKG", "CTU","XIY","CGQ","NKG" ]
 	}
 }

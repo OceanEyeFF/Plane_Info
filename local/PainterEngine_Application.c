@@ -44,4 +44,3 @@ px_void PX_ApplicationPostEvent(PX_Application *pApp,PX_Object_Event e)
 	}
 
 }
-

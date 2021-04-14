@@ -31,7 +31,7 @@ all:$(project_build_o)  $(painterengine_build_painterengine_o)
 	-I "$(painterengine_path)/platform/windows" \
 	-L. -lwinmm -ld2d1 -lws2_32 -ldsound -lcomdlg32 -mwindows
 	$(target)
-	make clean
+	make cleanproject
 	
 
 $(project_path)/%.o:$(project_path)/%.c
@@ -50,12 +50,15 @@ $(painterengine_path)/platform/windows/%.o:$(painterengine_path)/platform/window
 	gcc -c $^ -o $@ -I "$(project_path)" -I "$(painterengine_path)" -I "$(painterengine_path)/platform/windows"
 
 
-.PHONY:clean
-clean:
+.PHONY:cleanall
+cleanall:
 	-del /s  "$(painterengine_path)\core\*.o"
 	-del /s  "$(painterengine_path)\kernel\*.o"
 	-del /s  "$(painterengine_path)\architecture\*.o"
 	-del /s  "$(painterengine_path)\platform\windows\*.o"
 	-del /s  "$(project_path)\*.o"
 
-	
+.PHONY:cleanproject
+cleanproject:
+	-del /s  "$(project_path)\*.o"
+
