@@ -18,7 +18,7 @@ px_bool PX_ApplicationInitialize(PX_Application *pApp,px_int screen_width,px_int
 
 px_void PX_ApplicationUpdate(PX_Application *pApp,px_dword elpased)
 {
-
+	PX_ObjectUpdate(pApp->ui_root,elpased);
 }
 
 px_void PX_ApplicationRender(PX_Application *pApp,px_dword elpased)
@@ -26,15 +26,22 @@ px_void PX_ApplicationRender(PX_Application *pApp,px_dword elpased)
 	px_surface *pRenderSurface=&pApp->runtime.RenderSurface;
 	PX_Runtime* pRuntime=&pApp->runtime;
 	PX_RuntimeRenderClear(&pApp->runtime,PX_OBJECT_UI_DEFAULT_BACKGROUNDCOLOR);
-//	PX_GeoDrawBorder(pRenderSurface,100,100,300,300,8,PX_COLOR(220,255,0,0));
-//	PX_GeoDrawBorder(pRenderSurface,200,200,500,500,8,PX_COLOR(128,0,0,255));
+	//PX_GeoDrawBorder(pRenderSurface,100,100,300,300,8,PX_COLOR(220,220,220,220));
+	//PX_GeoDrawBorder(pRenderSurface,200,200,500,500,8,PX_COLOR(128,128,128,128));
 	PX_ObjectRender(pRenderSurface,pApp->ui_root,elpased);
-
 }
 
 px_void PX_ApplicationPostEvent(PX_Application *pApp,PX_Object_Event e)
 {
+	PX_Runtime* pRuntime=&pApp->runtime;
+	px_surface *pRenderSurface=&pApp->runtime.RenderSurface;
 	PX_ApplicationEventDefault(&pApp->runtime, e);
+	PX_ObjectPostEvent(pApp->ui_root,e);
+
+	if(e.Event==PX_OBJECT_EVENT_WINDOWRESIZE)
+	{
+		PX_UIUpdateObjectsPostions(&pApp->ui,pApp->ui_root,&pApp->ui_json.rootValue,pRuntime->surface_width,pRuntime->surface_height);
+	}
 
 }
 

@@ -6,12 +6,12 @@
 #include "platform/modules/px_file.h"
 
 #define PX_APPLICATION_NAME "PainterEngine"
-#define PX_APPLICATION_SURFACE_SIZE 680
+#define PX_APPLICATION_SURFACE_SIZE 800
 
 #define PX_APPLICATION_MEMORYPOOL_UI_SIZE 1024*1024*16
 #define PX_APPLICATION_MEMORYPOOL_RESOURCES_SIZE 1024*1024*96
 #define PX_APPLICATION_MEMORYPOOL_GAME_SIZE 1024*1024*8
-#define PX_APPLICATION_MEMORYPOOL_SPACE_SIZE 1024*1024*8
+#define PX_APPLICATION_MEMORYPOOL_SPACE_SIZE 1024*1024*40
 //////////////////////////////////////////////////////////////////////////
 
 #include "architecture/PainterEngine_Runtime.h"
