@@ -2296,12 +2296,24 @@ px_void PX_wstrcpy(px_word *dst,const px_word *src,px_int size)
 		*(dst-1)='\0';
 }
 
-px_void PX_strcat(px_char *src,const px_char *cat)
+px_int PX_strcat(px_char *src,const px_char *cat)
 {
 	px_int len=PX_strlen(cat);
+	px_char *old=src;
 	while(*src)src++;
 	while(len--)*src++=*cat++;
 	*src='\0';
+	return (px_int)(src-old);
+}
+
+px_int PX_strcatatpos(px_char *src,px_int pos,const px_char *cat)
+{
+	px_int len=PX_strlen(cat);
+	px_char *old=src;
+	src+=pos;
+	while(len--)*src++=*cat++;
+	*src='\0';
+	return (px_int)(src-old);
 }
 
 px_void PX_wstrcat(px_word *src,const px_word *cat)
@@ -2312,10 +2324,10 @@ px_void PX_wstrcat(px_word *src,const px_word *cat)
 	*src='\0';
 }
 
-px_void PX_strset(px_char *dst,const px_char*src)
+px_int PX_strset(px_char *dst,const px_char*src)
 {
 	dst[0]=0;
-	PX_strcat(dst,src);
+	return PX_strcat(dst,src);
 }
 
 

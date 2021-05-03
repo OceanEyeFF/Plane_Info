@@ -3,7 +3,7 @@
 void PX_ASSERT()
 {
 #ifdef PX_DEBUG_MODE
-	__debugbreak();
+//	__debugbreak();
 #endif
 }
 

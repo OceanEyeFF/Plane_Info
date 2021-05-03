@@ -8,10 +8,10 @@
 #define PX_APPLICATION_NAME "PainterEngine"
 #define PX_APPLICATION_SURFACE_SIZE 800
 
-#define PX_APPLICATION_MEMORYPOOL_UI_SIZE 1024*1024*16
-#define PX_APPLICATION_MEMORYPOOL_RESOURCES_SIZE 1024*1024*96
-#define PX_APPLICATION_MEMORYPOOL_GAME_SIZE 1024*1024*8
-#define PX_APPLICATION_MEMORYPOOL_SPACE_SIZE 1024*1024*40
+#define PX_APPLICATION_MEMORYPOOL_UI_SIZE 1024*1024*256
+#define PX_APPLICATION_MEMORYPOOL_RESOURCES_SIZE 1024*1024*512
+#define PX_APPLICATION_MEMORYPOOL_GAME_SIZE 1024*1024*512
+#define PX_APPLICATION_MEMORYPOOL_SPACE_SIZE 1024*1024*512
 //////////////////////////////////////////////////////////////////////////
 
 #include "architecture/PainterEngine_Runtime.h"
@@ -33,6 +33,7 @@ px_bool PX_LoadScriptToResource(PX_ResourceLibrary *presourcelib,const px_char P
 px_bool PX_LoadSoundToResource(PX_ResourceLibrary *presourcelib,const px_char Path[],const px_char key[]);
 px_bool PX_LoadFontModuleFromFile(PX_FontModule *fm,const px_char Path[]);
 px_bool PX_LoadJsonFromFile(PX_Json *json,const px_char *path);
+px_bool PX_WriteJsonToFile(px_memorypool *mp,PX_Json *json,const px_char *path);
 #endif
 
 

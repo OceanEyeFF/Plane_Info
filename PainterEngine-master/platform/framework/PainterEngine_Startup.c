@@ -289,4 +289,16 @@ _ERROR:
 	return PX_FALSE;
 }
 
+px_bool PX_WriteJsonToFile(PX_Json *json,const px_char *path)
+{
+	px_string s;
+
+	if(!PX_JsonBuild(json,&s)) goto _ERROR;
+	if(!PX_SaveDataToFile(s.buffer,s.bufferlen,path)) goto _ERROR;
+
+	return PX_TRUE;
+_ERROR:
+	return PX_FALSE;
+}
+
 #endif
