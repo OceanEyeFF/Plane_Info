@@ -3,6 +3,9 @@
 
 #include "PainterEngine_Startup.h"
 
+#include <process.h>
+#include <Windows.h>
+
 typedef struct
 {
 	PX_FontModule fontmodule;

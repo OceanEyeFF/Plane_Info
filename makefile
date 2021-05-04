@@ -35,28 +35,28 @@ all:$(project_build_o)  $(painterengine_build_painterengine_o)
 	-I "$(painterengine_path)" \
 	-I "$(project_path)" \
 	-I "$(painterengine_path)/platform/windows" \
-	-L. -lwinmm -ld2d1 -lws2_32 -ldsound -lcomdlg32 -g -D_DEBUG
+	-L. -lwinmm -ld2d1 -lws2_32 -ldsound -lcomdlg32 -g
 	$(target)
 	make cleanproject
 	
 
 $(project_path)/%.o:$(project_path)/%.cpp
-	g++ -c $^ -o $@ -I "$(painterengine_path)" -I "$(painterengine_path)/platform/windows" -g -D_DEBUG
+	g++ -c $^ -o $@ -I "$(painterengine_path)" -I "$(painterengine_path)/platform/windows" -g
 
 $(project_path)/%.o:$(project_path)/%.c
-	gcc -c $^ -o $@ -I "$(painterengine_path)" -I "$(painterengine_path)/platform/windows" -g -D_DEBUG
+	gcc -c $^ -o $@ -I "$(painterengine_path)" -I "$(painterengine_path)/platform/windows" -g
 
 $(painterengine_path)/architecture/%.o:$(painterengine_path)/architecture/%.c 
-	gcc -c $^ -o $@ -I "$(painterengine_path)" -g -D_DEBUG
+	gcc -c $^ -o $@ -I "$(painterengine_path)" -g
 
 $(painterengine_path)/kernel/%.o:$(painterengine_path)/kernel/%.c
-	gcc -c $^ -o $@ -g -D_DEBUG
+	gcc -c $^ -o $@ -g
 
 $(painterengine_path)/core/%.o:$(painterengine_path)/core/%.c
-	gcc -c $^ -o $@ -g -D_DEBUG
+	gcc -c $^ -o $@ -g
 
 $(painterengine_path)/platform/windows/%.o:$(painterengine_path)/platform/windows/%.c
-	gcc -c $^ -o $@ -I "$(project_path)" -I "$(painterengine_path)" -I "$(painterengine_path)/platform/windows" -g -D_DEBUG
+	gcc -c $^ -o $@ -I "$(project_path)" -I "$(painterengine_path)" -I "$(painterengine_path)/platform/windows" -g
 
 
 .PHONY:cleanall

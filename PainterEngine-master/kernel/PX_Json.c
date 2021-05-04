@@ -1204,16 +1204,22 @@ px_int PX_JsonSortJsonArray(PX_Json_Value *pArray,const px_char Keyword[],const 
 {
 	if(pArray->type!=PX_JSON_VALUE_TYPE_ARRAY) return 1;
 	px_list *Array=&pArray->_array;
+	px_list_node *node=Array->head;
 	px_int i;
 	px_int siz=PX_ListSize(Array);
 	PX_QuickSortAtom *pool=((PX_QuickSortAtom*)calloc(siz+5,sizeof(PX_QuickSortAtom)));
-	for(i=0;i<siz;++i)
+	for(i=0,node=Array->head;i<siz;++i,node=node->pnext)
 	{
-		pool[i].pData=PX_ListNodeAt(Array,i)->pdata;
+//		pool[i].pData=PX_ListNodeAt(Array,i)->pdata;
+		pool[i].pData=node->pdata;
 		if(((PX_Json_Value*)pool[i].pData)->type!=PX_JSON_VALUE_TYPE_OBJECT) return 2;
 		pool[i].weight=PX_JsonGetObjectValue(((PX_Json_Value*)pool[i].pData),Keyword)->_number;
 	}
 	Symbol?PX_Quicksort_MaxToMin(pool,0,siz-1):PX_Quicksort_MinToMax(pool,0,siz-1);
-	for(i=0;i<siz;++i) PX_ListNodeAt(Array,i)->pdata=pool[i].pData;
+	for(i=0,node=Array->head;i<siz;++i,node=node->pnext) 
+	{
+//		PX_ListNodeAt(Array,i)->pdata=pool[i].pData;
+		node->pdata=pool[i].pData;
+	}
 	return 0;
 }

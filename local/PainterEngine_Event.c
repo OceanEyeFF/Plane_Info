@@ -66,6 +66,8 @@ px_void PX_ApplicationOnSearchButtonClicked(PX_Object *pObject,PX_Object_Event e
 	PX_Runtime *pRuntime=&pApp->runtime;
 	px_char *Start_Time_Info[3],*End_Time_Info[3];
 	px_int End_Time_Int[3],Start_Time_Int[3];
+	px_int Start_Time_Stamp,End_Time_Stamp;
+	do
 	{
 		Start_Time_Info[0]=PX_Object_SelectBarGetCurrentText(PX_UIGetObjectByID(&pApp->ui,(const px_char*)"start_time_yy"));
 		Start_Time_Info[1]=PX_Object_SelectBarGetCurrentText(PX_UIGetObjectByID(&pApp->ui,(const px_char*)"start_time_mm"));
@@ -80,22 +82,57 @@ px_void PX_ApplicationOnSearchButtonClicked(PX_Object *pObject,PX_Object_Event e
 		End_Time_Int[0]=PX_atoi(End_Time_Info[0]);
 		End_Time_Int[1]=PX_atoi(End_Time_Info[1]);
 		End_Time_Int[2]=PX_atoi(End_Time_Info[2]);
+
+		Start_Time_Stamp=calc_Date_Stamp_by_int(Start_Time_Int[0],Start_Time_Int[1],Start_Time_Int[2]);
+		End_Time_Stamp=calc_Date_Stamp_by_int(End_Time_Int[0],End_Time_Int[1],End_Time_Int[2]);
 	}while(0);
 
+	if(Start_Time_Stamp>End_Time_Stamp) return;
+
 	px_char *Departure,*Arrival;
+	do
 	{
 		Departure=PX_Object_SelectBarGetCurrentText(PX_UIGetObjectByID(&pApp->ui,(const px_char*)"departure"));
 		Arrival=PX_Object_SelectBarGetCurrentText(PX_UIGetObjectByID(&pApp->ui,(const px_char*)"arrival"));
 	}while(0);
 
-	PX_Object *DateSelect_Object=PX_UIGetObjectByID(&pApp->ui,(const px_char*)"Date");
-	PX_Object_SelectBar *DateSelect_SelectBar=PX_Object_GetSelectBar(DateSelect_Object);
+	do
+	{
+		px_int DateTimeStamp;
+		px_char DateTimeString[20];
+		PX_Object *Date_Object=PX_UIGetObjectByID(&pApp->ui,(const px_char*)"Date");
+		PX_Object_SelectBar *Date_Selectbar=PX_Object_GetSelectBar(Date_Object);
+		PX_VectorPop(&Date_Selectbar->Items);
+		for(DateTimeStamp=Start_Time_Stamp;DateTimeStamp<=End_Time_Stamp;++DateTimeStamp)
+		{
+			Convert_Date_Stamp_to_char(DateTimeStamp,DateTimeString);
+			PX_Object_SelectBarAddItem(Date_Object,DateTimeString);
+		}
+
+	}
+	while(0);//清空selectbar
+
 	PX_ListClear(&query_saved);
 	query_saved.mp=PX_NULL;
+	/*
+	long long rec[5]={
+		(long long)&query_saved,
+		(long long)Start_Time_Stamp,
+		(long long)End_Time_Stamp,
+		(long long)Departure,
+		(long long)Arrival
+	};
 
+	HANDLE hThread = (HANDLE)_beginthread(ThreadProcDSQ, 1, rec);*/
 	PX_ListInitialize(&pRuntime->mp_resources,&query_saved);
-	Data_Structure_query(&query_saved,calc_Date_Stamp_by_int(Start_Time_Int[0],Start_Time_Int[1],Start_Time_Int[2]),calc_Date_Stamp_by_int(End_Time_Int[0],End_Time_Int[1],End_Time_Int[2]),Departure,Arrival);
-	
+	Data_Structure_query(&query_saved,
+			Start_Time_Stamp,
+			End_Time_Stamp,
+			Departure,
+			Arrival
+			);//查询语句
+
+
 	px_list_node *node=query_saved.head;
 	PX_Json_Value *cur;
 	while(node)
@@ -103,4 +140,8 @@ px_void PX_ApplicationOnSearchButtonClicked(PX_Object *pObject,PX_Object_Event e
 		cur=(PX_Json_Value*)node->pdata;
 		node=node->pnext;
 	}
+}
+
+px_void PX_ApplicationOnSearchDateChanged(PX_Object *pObject,PX_Object_Event e,px_void *ptr)
+{
 }

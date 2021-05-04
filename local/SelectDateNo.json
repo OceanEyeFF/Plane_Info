@@ -1,0 +1,68 @@
+{
+	"label":
+	{
+		"id": "MidText1", //可选参数,控件id
+		"x": -144, //可选参数,控件x坐标,默认为0
+		"y": -204, //可选参数,控件y坐标,默认为0
+		"width": 150, //可选参数,控件宽度,默认为0
+		"height": 32, //可选参数,控件高度,默认为0
+		//"length": 112, 可选参数,控件长度,默认为0 3D控件
+		"halign": "mid", //可选参数,水平对齐方式
+		"valign": "mid", //可选参数,水平垂直方式
+		"align": "center",
+		"text": "Exact Date",
+		"align":"center",
+		"fontcolor": [255,192,192,192]
+	},
+	"selectbar":
+	{
+		"id": "Date",
+		"x" : 6,
+		"y" : -204,
+		"width": 200, //可选参数,控件宽度,默认为0
+		"height": 32,
+		"halign": "mid", //可选参数,水平对齐方式
+		"valign": "mid", //可选参数,垂直对齐方式
+		"cursorcolor":[255,32,32,32],
+		"backgroundcolor":[255,64,64,64],
+		"fontcolor": [255,192,192,192],
+		"bordercolor": [255,192,192,192],
+		"style":"round",
+		"align":"center",
+		"displaycount":5,
+		"items":[]
+	},
+	"label":
+	{
+		"id": "MidText2", //可选参数,控件id
+		"x": -144, //可选参数,控件x坐标,默认为0
+		"y": -152, //可选参数,控件y坐标,默认为0
+		"width": 150, //可选参数,控件宽度,默认为0
+		"height": 32, //可选参数,控件高度,默认为0
+		//"length": 112, 可选参数,控件长度,默认为0 3D控件
+		"halign": "mid", //可选参数,水平对齐方式
+		"valign": "mid", //可选参数,水平垂直方式
+		"align": "center",
+		"text": "Flight No.",
+		"align":"center",
+		"fontcolor": [255,192,192,192]
+	},
+	"selectbar":
+	{
+		"id": "Flight",
+		"x" : 6,
+		"y" : -152,
+		"width": 100, //可选参数,控件宽度,默认为0
+		"height": 32,
+		"halign": "mid", //可选参数,水平对齐方式
+		"valign": "mid", //可选参数,垂直对齐方式
+		"cursorcolor":[255,32,32,32],
+		"backgroundcolor":[255,64,64,64],
+		"fontcolor": [255,192,192,192],
+		"bordercolor": [255,192,192,192],
+		"style":"round",
+		"align":"center",
+		"displaycount":5,
+		"items":[]
+	}
+}

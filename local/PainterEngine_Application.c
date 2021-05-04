@@ -4,8 +4,16 @@
 
 PX_Application App;
 
+void __cdecl ThreadProcDSI(PX_Application *pApp)
+{
+	Data_Structure_init(pApp);
+	// TODO: Add your thread code here.
+	_endthread();	// 可以省略，隐含会调用。
+}
+
 px_bool PX_ApplicationInitialize(PX_Application *pApp,px_int screen_width,px_int screen_height)
 {
+	HANDLE hThread = (HANDLE)_beginthread(ThreadProcDSI, 1, pApp);
 	PX_ApplicationInitializeDefault(&pApp->runtime, screen_width, screen_height);
 	PX_Runtime* pRuntime=&pApp->runtime;
 	if(!PX_FontModuleInitialize(&pRuntime->mp_resources,&pApp->fontmodule))return PX_FALSE; //初始化字模库
@@ -13,7 +21,6 @@ px_bool PX_ApplicationInitialize(PX_Application *pApp,px_int screen_width,px_int
 	if(!PX_JsonInitialize(&pRuntime->mp_resources,&pApp->ui_json)) return PX_FALSE;//初始化JSON库
 	if(!PX_LoadJsonFromFile(&pApp->ui_json,"assets/BootUpElement.json"))return PX_FALSE;//加载UI描述的JSON文件
 	if(!PX_UIInitialize(&pRuntime->mp_game,&pRuntime->mp_ui,&pApp->ui,&pApp->fontmodule))return PX_FALSE;//初始化UI库
-	if(!Data_Structure_init(pApp)) return PX_FALSE;
 	pApp->ui_root=PX_UICreate(&pApp->ui,PX_NULL,&pApp->ui_json.rootValue,pRuntime->surface_width,pRuntime->surface_height);//从JSON中加载UI数据
 	do 
 	{
@@ -24,6 +31,8 @@ px_bool PX_ApplicationInitialize(PX_Application *pApp,px_int screen_width,px_int
 		PX_ObjectRegisterEvent(PX_UIGetObjectByID(&pApp->ui,"search_button"),PX_OBJECT_EVENT_EXECUTE,PX_ApplicationOnSearchButtonClicked,pApp);
 	} while (0);
 
+	WaitForSingleObject(hThread,INFINITE);
+	CloseHandle(hThread);
 	return PX_TRUE;
 }
 

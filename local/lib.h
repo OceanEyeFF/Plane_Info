@@ -20,6 +20,7 @@ extern "C"
 px_int calc_Date_Stamp_by_int(px_int yy,px_int mm,px_int dd);
 px_int calc_Date_Stamp(px_char s[]);
 px_int myhash(const px_char s[]);
+px_void Convert_Date_Stamp_to_char(px_int stamp,px_char ret[]);
 
 #ifdef __cplusplus
 }
