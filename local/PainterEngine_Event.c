@@ -300,3 +300,6 @@ px_void PX_ApplicationOnSearchFlightNoChanged(PX_Object *pObject,PX_Object_Event
 	while(0);// 获取开始时间结束时间
 	update_SearchFlightSeatInfo_by_FlightNO(pApp,Start_Time_Stamp);
 }
+
+px_void PX_ApplicationOnBookButtonClicked(PX_Object *pObject,PX_Object_Event e,px_void *ptr)
+{}
