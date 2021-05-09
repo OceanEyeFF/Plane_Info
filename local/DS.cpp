@@ -134,7 +134,7 @@ px_bool calc_Data_Date_stamp(PX_Json_Value *data,px_memorypool *mp)
 		tmp=(PX_Json_Value*)node->pdata;
 		node=node->pnext;
 		Date=PX_JsonGetObjectValue(tmp,"Date");
-		Date_Stamp=calc_Date_Stamp(Date->_string.buffer);
+		Date_Stamp=calc_Date_Stamp(Date->_string.buffer,"-");
 		pExistValue=PX_JsonGetObjectValue(tmp,"Date_Stamp");
 		if(!pExistValue)
 		{
@@ -154,21 +154,27 @@ px_bool calc_Data_Date_stamp(PX_Json_Value *data,px_memorypool *mp)
 PX_Json JsonData;
 px_int Start_Time_int=0,End_Time_int=0;
 
+px_bool Data_Structure_load(PX_Application *pApp)
+{
+	PX_Runtime* pRuntime=&pApp->runtime;
+	if(!PX_JsonInitialize(&pRuntime->mp_resources,&JsonData)) return PX_FALSE;//初始化JSON库
+	if(!PX_LoadJsonFromFile(&JsonData,"assets/data.json"))return PX_FALSE;//加载UI描述的JSON文件
+	return PX_TRUE;
+}
+
 px_bool Data_Structure_init(PX_Application *pApp)
 {
 	PX_Json_Value *Data=NULL,*Start_Time_String=NULL,*End_Time_String=NULL;
 	PX_Runtime* pRuntime=&pApp->runtime;
 	px_int l=0,r=0;
-	if(!PX_JsonInitialize(&pRuntime->mp_resources,&JsonData)) return PX_FALSE;//初始化JSON库
-	if(!PX_LoadJsonFromFile(&JsonData,"assets/data.json"))return PX_FALSE;//加载UI描述的JSON文件
 	Data=PX_JsonGetValue(&JsonData,"data");
 	if(!calc_Data_Date_stamp(Data,JsonData.mp)) return PX_FALSE;
 
 	Start_Time_String=PX_JsonGetValue(&JsonData,"start_time");
-	Start_Time_int=calc_Date_Stamp(Start_Time_String->_string.buffer);
+	Start_Time_int=calc_Date_Stamp(Start_Time_String->_string.buffer,"-");
 	PX_JsonAddNumber(&JsonData,"","start_time_stamp",Start_Time_int);
 	End_Time_String=PX_JsonGetValue(&JsonData,"end_time");
-	End_Time_int=calc_Date_Stamp(End_Time_String->_string.buffer);
+	End_Time_int=calc_Date_Stamp(End_Time_String->_string.buffer,"-");
 	PX_JsonAddNumber(&JsonData,"","end_time_stamp",End_Time_int);
 	px_int ret=PX_JsonSortJsonArray(Data,"Date_Stamp",PX_FALSE);
 	if(ret) return PX_FALSE;

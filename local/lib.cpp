@@ -12,16 +12,17 @@ px_int calc_Date_Stamp_by_int(px_int yy,px_int mm,px_int dd)
 	return ret;
 }
 
-px_int calc_Date_Stamp(px_char s[])
+px_int calc_Date_Stamp(px_char s[],px_char inv[])
 {
+	if(PX_strlen(inv)!=1) return -1;
 	px_int yy=0,mm=0,dd=0;
-	while(*s!='-')
+	while(*s!=inv[0])
 	{
 		yy=yy*10+*s-'0';
 		++s;
 	}
 	++s;
-	while(*s!='-')
+	while(*s!=inv[0])
 	{
 		mm=mm*10+*s-'0';
 		++s;
@@ -76,4 +77,13 @@ px_int myhash(const px_char s[])
 	return ret;
 #undef factor
 #undef MOD
+}
+
+px_bool stringequal(px_char S1[],px_char S2[])
+{
+	px_int len1=PX_strlen(S1),len2=PX_strlen(S2);
+	if(len1!=len2) return PX_FALSE;
+	px_int node=0;
+	while(S1[node]==S2[node] && (S1[node])) ++node;
+	return node==len1;
 }

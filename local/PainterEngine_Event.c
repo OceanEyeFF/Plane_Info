@@ -59,6 +59,104 @@ px_void PX_ApplicationOnEndTimeSelectBarValueChanged(PX_Object *pObject,PX_Objec
 }
 
 px_list query_saved;
+px_list_node *rec[1000];
+
+px_void PX_ApplicationInfoPageShowButtonClicked(PX_Object *pObject,PX_Object_Event e,px_void *ptr)
+{
+	PX_Application *pApp=(PX_Application *)ptr;
+	PX_Runtime *pRuntime=&pApp->runtime;
+	PX_ObjectSetVisible(pApp->ui_root,0);
+	PX_ObjectSetVisible(pApp->info_root,1);
+}
+
+px_void PX_ApplicationInfoPageHideButtonClicked(PX_Object *pObject,PX_Object_Event e,px_void *ptr)
+{
+	PX_Application *pApp=(PX_Application *)ptr;
+	PX_Runtime *pRuntime=&pApp->runtime;
+	PX_ObjectSetVisible(pApp->ui_root,1);
+	PX_ObjectSetVisible(pApp->info_root,0);
+}
+
+px_void update_SearchFlightSeatInfo_by_FlightNO(PX_Application *pApp,px_int Start_Time_Stamp)
+{
+	PX_Runtime *pRuntime=&pApp->runtime;
+	PX_Object *SearchDateObject=PX_UIGetObjectByID(&pApp->ui,(const px_char*)"Date");
+	PX_Object *SearchFlightNoObject=PX_UIGetObjectByID(&pApp->ui,(const px_char*)"Flight");
+
+	PX_Object_SelectBar *SearchFlightNoSelectBar=PX_Object_GetSelectBar(SearchFlightNoObject);
+	PX_Object_SelectBar *SearchDateSelectBar=PX_Object_GetSelectBar(SearchDateObject);
+
+	px_char *TimeString=PX_Object_SelectBarGetCurrentText(SearchDateObject);
+	px_int Current_Time_Stamp=calc_Date_Stamp(TimeString,"/");
+
+	px_list_node *pNode;
+	PX_Json_Value *pData;
+	{
+		for(pNode=rec[Current_Time_Stamp-Start_Time_Stamp];;pNode=pNode->pnext)
+		{
+			if(!pNode) break;
+			pData=(PX_Json_Value*)pNode->pdata;
+			if(PX_JsonGetObjectValue(pData,"Date_Stamp")->_number!=Current_Time_Stamp)
+				break;
+			if(stringequal(PX_JsonGetObjectValue(pData,"Flight No")->_string.buffer,(px_char*)PX_Object_SelectBarGetCurrentText(SearchFlightNoObject))) break;
+		}
+	}while(0);
+
+	PX_Object *SearchFlightSeatObject[3];
+	{
+		SearchFlightSeatObject[0]=PX_UIGetObjectByID(&pApp->ui,(const px_char*)"RightBorderText1");
+		SearchFlightSeatObject[1]=PX_UIGetObjectByID(&pApp->ui,(const px_char*)"RightBorderText2");
+		SearchFlightSeatObject[2]=PX_UIGetObjectByID(&pApp->ui,(const px_char*)"RightBorderText3");
+	}while(0);
+
+	px_int ExpectSeat[3];
+	{
+		px_int i;
+		for(i=0;i<3;++i) ExpectSeat[i]=PX_JsonGetArrayValue(PX_JsonGetObjectValue(pData,"Seats"),i)->_number;
+	}while(0);
+
+	px_int i;
+	px_char tmpstring[10];
+	for(i=0;i<3;++i)
+	{
+		PX_itoa(ExpectSeat[i],tmpstring,10,10);
+		PX_Object_LabelSetText(SearchFlightSeatObject[i],tmpstring);
+	}
+}
+
+px_void update_SearchFlightNo_by_DateInfo(PX_Application* pApp,px_int Start_Time_Stamp)
+{
+	PX_Runtime *pRuntime=&pApp->runtime;
+	PX_Object *SearchFlightNoObject=PX_UIGetObjectByID(&pApp->ui,(const px_char*)"Flight");
+	PX_Object *SearchDateObject=PX_UIGetObjectByID(&pApp->ui,(const px_char*)"Date");
+
+	PX_Object_SelectBar *SearchFlightNoSelectBar=PX_Object_GetSelectBar(SearchFlightNoObject);
+	PX_Object_SelectBar *SearchDateSelectBar=PX_Object_GetSelectBar(SearchDateObject);
+
+	while(PX_VectorPop(&SearchFlightNoSelectBar->Items));
+
+	px_char *TimeString=PX_Object_SelectBarGetCurrentText(SearchDateObject);
+	px_int Current_Time_Stamp=calc_Date_Stamp(TimeString,"/");
+
+	px_list_node *pNodeList;
+	PX_Json_Value *pData;
+
+	if(rec[Current_Time_Stamp-Start_Time_Stamp]==PX_NULL) return;
+	do
+	{
+		for(pNodeList=rec[Current_Time_Stamp-Start_Time_Stamp];;pNodeList=pNodeList->pnext)
+		{
+			if(!pNodeList) break;
+			pData=(PX_Json_Value*)pNodeList->pdata;
+			if(PX_JsonGetObjectValue(pData,"Date_Stamp")->_number!=Current_Time_Stamp)
+				break;
+			PX_Object_SelectBarAddItem(SearchFlightNoObject,PX_JsonGetObjectValue(pData,"Flight No")->_string.buffer);
+		}
+	}
+	while(0);//重置selectbar
+
+	update_SearchFlightSeatInfo_by_FlightNO(pApp,Start_Time_Stamp);
+}
 
 px_void PX_ApplicationOnSearchButtonClicked(PX_Object *pObject,PX_Object_Event e,px_void *ptr)
 {
@@ -85,7 +183,8 @@ px_void PX_ApplicationOnSearchButtonClicked(PX_Object *pObject,PX_Object_Event e
 
 		Start_Time_Stamp=calc_Date_Stamp_by_int(Start_Time_Int[0],Start_Time_Int[1],Start_Time_Int[2]);
 		End_Time_Stamp=calc_Date_Stamp_by_int(End_Time_Int[0],End_Time_Int[1],End_Time_Int[2]);
-	}while(0);
+	}
+	while(0);// 获取开始时间结束时间
 
 	if(Start_Time_Stamp>End_Time_Stamp) return;
 
@@ -94,7 +193,10 @@ px_void PX_ApplicationOnSearchButtonClicked(PX_Object *pObject,PX_Object_Event e
 	{
 		Departure=PX_Object_SelectBarGetCurrentText(PX_UIGetObjectByID(&pApp->ui,(const px_char*)"departure"));
 		Arrival=PX_Object_SelectBarGetCurrentText(PX_UIGetObjectByID(&pApp->ui,(const px_char*)"arrival"));
-	}while(0);
+	}
+	while(0);//获取始发地，目的地
+
+	if(stringequal(Departure,Arrival)) return;
 
 	do
 	{
@@ -102,7 +204,7 @@ px_void PX_ApplicationOnSearchButtonClicked(PX_Object *pObject,PX_Object_Event e
 		px_char DateTimeString[20];
 		PX_Object *Date_Object=PX_UIGetObjectByID(&pApp->ui,(const px_char*)"Date");
 		PX_Object_SelectBar *Date_Selectbar=PX_Object_GetSelectBar(Date_Object);
-		PX_VectorPop(&Date_Selectbar->Items);
+		while(PX_VectorPop(&Date_Selectbar->Items));
 		for(DateTimeStamp=Start_Time_Stamp;DateTimeStamp<=End_Time_Stamp;++DateTimeStamp)
 		{
 			Convert_Date_Stamp_to_char(DateTimeStamp,DateTimeString);
@@ -110,38 +212,91 @@ px_void PX_ApplicationOnSearchButtonClicked(PX_Object *pObject,PX_Object_Event e
 		}
 
 	}
-	while(0);//清空selectbar
+	while(0);//重置selectbar
 
 	PX_ListClear(&query_saved);
 	query_saved.mp=PX_NULL;
-	/*
-	long long rec[5]={
-		(long long)&query_saved,
-		(long long)Start_Time_Stamp,
-		(long long)End_Time_Stamp,
-		(long long)Departure,
-		(long long)Arrival
-	};
 
-	HANDLE hThread = (HANDLE)_beginthread(ThreadProcDSQ, 1, rec);*/
 	PX_ListInitialize(&pRuntime->mp_resources,&query_saved);
-	Data_Structure_query(&query_saved,
-			Start_Time_Stamp,
-			End_Time_Stamp,
-			Departure,
-			Arrival
-			);//查询语句
+	Data_Structure_query(&query_saved,Start_Time_Stamp,End_Time_Stamp,Departure,Arrival);//查询语句
 
 
+	PX_memset(rec,PX_NULL,sizeof(rec));
 	px_list_node *node=query_saved.head;
-	PX_Json_Value *cur;
+	PX_Json_Value *tmp,*pExistValue;
+	px_int date,cur;
+	cur=Start_Time_Stamp;
 	while(node)
 	{
-		cur=(PX_Json_Value*)node->pdata;
+		tmp=(PX_Json_Value*)node->pdata;
+		date=PX_JsonGetObjectValue(tmp,"Date_Stamp")->_number;
+
+		while(date>cur) ++cur;
+
+		if(!rec[cur]) rec[cur-Start_Time_Stamp]=node;
+
 		node=node->pnext;
 	}
+
+	update_SearchFlightNo_by_DateInfo(pApp,Start_Time_Stamp);
 }
 
 px_void PX_ApplicationOnSearchDateChanged(PX_Object *pObject,PX_Object_Event e,px_void *ptr)
 {
+	PX_Application *pApp=(PX_Application *)ptr;
+	PX_Runtime *pRuntime=&pApp->runtime;
+	px_char *Start_Time_Info[3],*End_Time_Info[3];
+	px_int End_Time_Int[3],Start_Time_Int[3];
+	px_int Start_Time_Stamp,End_Time_Stamp;
+	do
+	{
+		Start_Time_Info[0]=PX_Object_SelectBarGetCurrentText(PX_UIGetObjectByID(&pApp->ui,(const px_char*)"start_time_yy"));
+		Start_Time_Info[1]=PX_Object_SelectBarGetCurrentText(PX_UIGetObjectByID(&pApp->ui,(const px_char*)"start_time_mm"));
+		Start_Time_Info[2]=PX_Object_SelectBarGetCurrentText(PX_UIGetObjectByID(&pApp->ui,(const px_char*)"start_time_dd"));
+		Start_Time_Int[0]=PX_atoi(Start_Time_Info[0]);
+		Start_Time_Int[1]=PX_atoi(Start_Time_Info[1]);
+		Start_Time_Int[2]=PX_atoi(Start_Time_Info[2]);
+
+		End_Time_Info[0]=PX_Object_SelectBarGetCurrentText(PX_UIGetObjectByID(&pApp->ui,(const px_char*)"end_time_yy"));
+		End_Time_Info[1]=PX_Object_SelectBarGetCurrentText(PX_UIGetObjectByID(&pApp->ui,(const px_char*)"end_time_mm"));
+		End_Time_Info[2]=PX_Object_SelectBarGetCurrentText(PX_UIGetObjectByID(&pApp->ui,(const px_char*)"end_time_dd"));
+		End_Time_Int[0]=PX_atoi(End_Time_Info[0]);
+		End_Time_Int[1]=PX_atoi(End_Time_Info[1]);
+		End_Time_Int[2]=PX_atoi(End_Time_Info[2]);
+
+		Start_Time_Stamp=calc_Date_Stamp_by_int(Start_Time_Int[0],Start_Time_Int[1],Start_Time_Int[2]);
+		End_Time_Stamp=calc_Date_Stamp_by_int(End_Time_Int[0],End_Time_Int[1],End_Time_Int[2]);
+	}
+	while(0);// 获取开始时间结束时间
+	update_SearchFlightNo_by_DateInfo(pApp,Start_Time_Stamp);
+}
+
+px_void PX_ApplicationOnSearchFlightNoChanged(PX_Object *pObject,PX_Object_Event e,px_void *ptr)
+{
+	PX_Application *pApp=(PX_Application *)ptr;
+	PX_Runtime *pRuntime=&pApp->runtime;
+	px_char *Start_Time_Info[3],*End_Time_Info[3];
+	px_int End_Time_Int[3],Start_Time_Int[3];
+	px_int Start_Time_Stamp,End_Time_Stamp;
+	do
+	{
+		Start_Time_Info[0]=PX_Object_SelectBarGetCurrentText(PX_UIGetObjectByID(&pApp->ui,(const px_char*)"start_time_yy"));
+		Start_Time_Info[1]=PX_Object_SelectBarGetCurrentText(PX_UIGetObjectByID(&pApp->ui,(const px_char*)"start_time_mm"));
+		Start_Time_Info[2]=PX_Object_SelectBarGetCurrentText(PX_UIGetObjectByID(&pApp->ui,(const px_char*)"start_time_dd"));
+		Start_Time_Int[0]=PX_atoi(Start_Time_Info[0]);
+		Start_Time_Int[1]=PX_atoi(Start_Time_Info[1]);
+		Start_Time_Int[2]=PX_atoi(Start_Time_Info[2]);
+
+		End_Time_Info[0]=PX_Object_SelectBarGetCurrentText(PX_UIGetObjectByID(&pApp->ui,(const px_char*)"end_time_yy"));
+		End_Time_Info[1]=PX_Object_SelectBarGetCurrentText(PX_UIGetObjectByID(&pApp->ui,(const px_char*)"end_time_mm"));
+		End_Time_Info[2]=PX_Object_SelectBarGetCurrentText(PX_UIGetObjectByID(&pApp->ui,(const px_char*)"end_time_dd"));
+		End_Time_Int[0]=PX_atoi(End_Time_Info[0]);
+		End_Time_Int[1]=PX_atoi(End_Time_Info[1]);
+		End_Time_Int[2]=PX_atoi(End_Time_Info[2]);
+
+		Start_Time_Stamp=calc_Date_Stamp_by_int(Start_Time_Int[0],Start_Time_Int[1],Start_Time_Int[2]);
+		End_Time_Stamp=calc_Date_Stamp_by_int(End_Time_Int[0],End_Time_Int[1],End_Time_Int[2]);
+	}
+	while(0);// 获取开始时间结束时间
+	update_SearchFlightSeatInfo_by_FlightNO(pApp,Start_Time_Stamp);
 }

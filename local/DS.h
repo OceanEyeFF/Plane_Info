@@ -16,6 +16,7 @@ extern "C"
 #include "PainterEngine_Application.h"
 #include "core/PX_MemoryPool.h"
 
+px_bool Data_Structure_load(PX_Application *pApp);
 px_bool Data_Structure_init(PX_Application *pApp);
 px_bool Data_Structure_query(px_list *result,px_int from,px_int to,px_char Departure[],px_char Arrival[]);
 

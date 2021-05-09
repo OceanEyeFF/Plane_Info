@@ -1,0 +1,35 @@
+{
+	"label":
+	{
+		"id": "LeftTitle", //可选参数,控件id
+		"x": 10, //可选参数,控件x坐标,默认为0
+		"y": -204, //可选参数,控件y坐标,默认为0
+		"width": 150, //可选参数,控件宽度,默认为0
+		"height": 32, //可选参数,控件高度,默认为0
+		//"length": 112, 可选参数,控件长度,默认为0 3D控件
+		"halign": "left", //可选参数,水平对齐方式
+		"valign": "mid", //可选参数,水平垂直方式
+		"align": "center",
+		"text": "详细信息",
+		"align":"center",
+		"fontcolor": [255,192,192,192]
+	},
+	"pushbutton":
+	{
+		"id":"SwitchToBootUpPage_button",
+		"x": -200,
+		"y": 0,
+		"width": 160,
+		"height": 32,
+		"halign": "right", //可选参数,水平对齐方式
+		"valign": "mid", //可选参数,垂直对齐方式
+		"style":"round",
+		"border": true,
+		"cursorcolor":[255,32,32,32],
+		"pushcolor":[255,32,32,32],
+		"backgroundcolor":[255,64,64,64],
+		"fontcolor": [255,192,192,192],
+		"align":"center",
+		"text":"HideDetails!"
+	}
+}
