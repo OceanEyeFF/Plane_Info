@@ -45,9 +45,9 @@ if __name__=="__main__":
                 'OccupiedSeats':[0,0,0],
                 'Requesting':[
                         {
-                    'Level':-1,
-                    'Name':r"",
-                    'Tele':r"",
+                    'Ticket':[0,0,0],
+                    'Name':r"Null",
+                    'Tele':r"NUll",
                     },
 
                     ]

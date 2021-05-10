@@ -302,4 +302,40 @@ px_void PX_ApplicationOnSearchFlightNoChanged(PX_Object *pObject,PX_Object_Event
 }
 
 px_void PX_ApplicationOnBookButtonClicked(PX_Object *pObject,PX_Object_Event e,px_void *ptr)
-{}
+{
+	PX_Application *pApp=(PX_Application *)ptr;
+	PX_Runtime *pRuntime=&pApp->runtime;
+	PX_Object *PhoneNoObject,*NameObject;
+	PhoneNoObject=PX_UIGetObjectByID(&pApp->ui,"MidBottomEditText1");
+	NameObject=PX_UIGetObjectByID(&pApp->ui,"MidBottomEditText2");
+
+	px_char *NameString,*PhoneNoString;
+	NameString=PX_Object_EditGetText(NameObject);
+	PhoneNoString=PX_Object_EditGetText(PhoneNoObject);
+
+	PX_Object *SearchFlightSeatCapObject[3];
+	{
+		SearchFlightSeatCapObject[0]=PX_UIGetObjectByID(&pApp->ui,(const px_char*)"RightBorderText1");
+		SearchFlightSeatCapObject[1]=PX_UIGetObjectByID(&pApp->ui,(const px_char*)"RightBorderText2");
+		SearchFlightSeatCapObject[2]=PX_UIGetObjectByID(&pApp->ui,(const px_char*)"RightBorderText3");
+	}while(0);
+
+	px_int SeatCapacity[3];
+	{
+		px_int i;
+		for(i=0;i<3;++i) SeatCapacity[i]=PX_atoi(PX_Object_LabelGetText(SearchFlightSeatCapObject[i]));
+	}while(0);
+
+	PX_Object *SearchFlightSeatTypeinObject[3];
+	{
+		SearchFlightSeatTypeinObject[0]=PX_UIGetObjectByID(&pApp->ui,"RightEditText1");
+		SearchFlightSeatTypeinObject[1]=PX_UIGetObjectByID(&pApp->ui,"RightEditText2");
+		SearchFlightSeatTypeinObject[2]=PX_UIGetObjectByID(&pApp->ui,"RightEditText3");
+	}while(0);
+
+	px_int SeatTypein[3];
+	{
+		px_int i;
+		for(i=0;i<3;++i) SeatTypein[i]=PX_atoi(PX_Object_EditGetText(SearchFlightSeatTypeinObject[i]));
+	}while(0);
+}

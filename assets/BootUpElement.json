@@ -466,6 +466,24 @@
 		"align": "center",
 		"fontcolor": [255,192,192,192]
 	},
+	"pushbutton":
+	{
+		"id":"SubmitSeatRequest_button",
+		"x": -200,
+		"y": 0,
+		"width": 160,
+		"height": 38,
+		"halign": "mid", //可选参数,水平对齐方式
+		"valign": "mid", //可选参数,垂直对齐方式
+		"style":"round",
+		"border": true,
+		"cursorcolor":[255,32,32,32],
+		"pushcolor":[255,32,32,32],
+		"backgroundcolor":[255,64,64,64],
+		"fontcolor": [255,192,192,192],
+		"align":"center",
+		"text":"ShowDetails!"
+	},
 //---------------------------------
 
 	"label":

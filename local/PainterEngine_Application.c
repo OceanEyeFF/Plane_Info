@@ -46,6 +46,7 @@ px_bool PX_ApplicationInitialize(PX_Application *pApp,px_int screen_width,px_int
 		PX_ObjectRegisterEvent(PX_UIGetObjectByID(&pApp->ui,"search_button"),PX_OBJECT_EVENT_EXECUTE,PX_ApplicationOnSearchButtonClicked,pApp);
 		PX_ObjectRegisterEvent(PX_UIGetObjectByID(&pApp->ui,"Date"),PX_OBJECT_EVENT_VALUECHANGED,PX_ApplicationOnSearchDateChanged,pApp);
 		PX_ObjectRegisterEvent(PX_UIGetObjectByID(&pApp->ui,"Flight"),PX_OBJECT_EVENT_VALUECHANGED,PX_ApplicationOnSearchFlightNoChanged,pApp);
+		PX_ObjectRegisterEvent(PX_UIGetObjectByID(&pApp->ui,"SubmitSeatRequest_button"),PX_OBJECT_EVENT_EXECUTE,PX_ApplicationOnSearchButtonClicked,pApp);
 
 		PX_ObjectRegisterEvent(PX_UIGetObjectByID(&pApp->ui,"SwitchToInfoPage_button"),PX_OBJECT_EVENT_EXECUTE,PX_ApplicationInfoPageShowButtonClicked,pApp);
 		PX_ObjectRegisterEvent(PX_UIGetObjectByID(&pApp->ui,"SwitchToBootUpPage_button"),PX_OBJECT_EVENT_EXECUTE,PX_ApplicationInfoPageHideButtonClicked,pApp);
