@@ -180,7 +180,7 @@ px_void PX_Object_EditAppendText(PX_Object *pObject,const px_char *Text)
 	if(pEdit)
 	{
 		PX_StringCat(&pEdit->text,Text);
-		pEdit->cursor_index=PX_strlen(Text);
+		pEdit->cursor_index=PX_strlen(&pEdit->text);
 	}
 }
 

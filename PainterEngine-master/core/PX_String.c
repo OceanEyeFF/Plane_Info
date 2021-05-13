@@ -81,7 +81,7 @@ px_void PX_StringTrimRight(px_string *str,px_int RightCount)
 	}
 	else
 	{
-		str->stringlen=str->stringlen-RightCount;
+		str->stringlen-=RightCount;
 		str->buffer[str->stringlen]='\0';
 	}
 }
@@ -117,8 +117,8 @@ px_bool PX_StringInitAlloc(px_memorypool *mp,px_string *str,px_int allocSize)
 	str->buffer=(px_char *)MP_Malloc(mp,allocSize);
 	if(!str->buffer)return PX_FALSE;
 	str->bufferlen=allocSize;
-	str->stringlen=0;
 	PX_memset(str->buffer,0,size);
+	str->stringlen=0;
 	str->mp=mp;
 	return PX_TRUE;
 }
@@ -215,7 +215,6 @@ px_bool PX_StringFormat8(px_string *str,const px_char fmt[],px_stringformat _1, 
 	while ((px_uint)(1<<++shl)<=finalLen);
 	str->bufferlen=(1<<shl);
 	str->buffer=(px_char *)MP_Malloc(str->mp,str->bufferlen);
-	str->stringlen=0;
 	if (!str->buffer)
 	{
 		return PX_FALSE;
@@ -283,7 +282,6 @@ px_bool PX_StringSet(px_string *str,const px_char fmt[])
 	while ((px_uint)(1<<++shl)<=finalLen);
 	str->bufferlen=(1<<shl);
 	str->buffer=(px_char *)MP_Malloc(str->mp,str->bufferlen);
-	str->stringlen=0;
 	if (!str->buffer)
 	{
 		return PX_FALSE;
@@ -351,7 +349,7 @@ px_bool PX_StringCatChar(px_string *str,px_char ch)
 	{
 		str->buffer[length-1]=ch;
 		str->buffer[length]='\0';
-		++str->stringlen;
+		str->stringlen=length;
 		return PX_TRUE;
 	}
 
@@ -388,11 +386,10 @@ px_bool PX_StringCopy(px_string *dest,px_string *res)
 px_bool PX_StringInsertChar(px_string *str,px_int index,px_char ch)
 {
 	px_int cpysize=PX_strlen(str->buffer+index);
-	if (PX_StringCatChar(str,' '))
+	if (PX_StringCatChar(str,'#'))
 	{
 		PX_memcpy(str->buffer+index+1,str->buffer+index,cpysize);
 		str->buffer[index]=ch;
-		++str->stringlen;
 	}
 	return PX_FALSE;
 }
@@ -680,5 +677,7 @@ px_void PX_StringInitFromConst(px_string *str,const px_char *constchar)
 	str->bufferlen=0;
 	str->stringlen=PX_strlen(constchar);
 }
+
+
 
 

@@ -203,3 +203,9 @@ px_bool Data_Structure_query(px_list *result,px_int from,px_int to,px_char Depar
 {
 	return SegmentTreeQuery(&Tree,std::max(1,from-Start_Time_int+1),std::min(End_Time_int-Start_Time_int+1,to-Start_Time_int),Departure,Arrival,result);
 }
+
+px_bool Data_Write(PX_Application *pApp)
+{
+	PX_Runtime* pRuntime=&pApp->runtime;
+	if(!PX_WriteJsonToFile(&pRuntime->mp_resources,&JsonData,"assets/data.json")) return PX_FALSE;
+}

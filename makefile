@@ -36,6 +36,7 @@ all:$(project_build_o)  $(painterengine_build_painterengine_o)
 	-I "$(project_path)" \
 	-I "$(painterengine_path)/platform/windows" \
 	-L. -lwinmm -ld2d1 -lws2_32 -ldsound -lcomdlg32 -g
+	$(target)
 	make cleanproject
 	
 
