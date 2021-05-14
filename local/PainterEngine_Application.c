@@ -3,6 +3,7 @@
 #include "DS.h"
 
 PX_Application App;
+px_int timecounter;
 
 void __cdecl ThreadProcDSI(PX_Application *pApp)
 {
@@ -13,6 +14,7 @@ void __cdecl ThreadProcDSI(PX_Application *pApp)
 
 px_bool PX_ApplicationInitialize(PX_Application *pApp,px_int screen_width,px_int screen_height)
 {
+	timecounter=0;
 	PX_ApplicationInitializeDefault(&pApp->runtime, screen_width, screen_height);
 	PX_Runtime* pRuntime=&pApp->runtime;
 	HANDLE hThread = (HANDLE)_beginthread(ThreadProcDSI, 1, pApp);
@@ -79,6 +81,7 @@ px_bool PX_ApplicationInitialize(PX_Application *pApp,px_int screen_width,px_int
 	return PX_TRUE;
 }
 
+
 px_void PX_ApplicationUpdate(PX_Application *pApp,px_dword elpased)
 {
 	PX_ObjectUpdate(pApp->ui_root,elpased);
@@ -86,6 +89,12 @@ px_void PX_ApplicationUpdate(PX_Application *pApp,px_dword elpased)
 	PX_ObjectUpdate(pApp->check_fail_page_root,elpased);
 	PX_ObjectUpdate(pApp->ensure_page_root,elpased);
 	PX_ObjectUpdate(pApp->book_successful_root,elpased);
+	timecounter+=elpased;
+	if(timecounter>120*1000)
+	{
+		timecounter=0;
+		//Data_Write(pApp);
+	}
 }
 
 px_void PX_ApplicationRender(PX_Application *pApp,px_dword elpased)
