@@ -17,6 +17,7 @@ px_bool PX_ApplicationInitialize(PX_Application *pApp,px_int screen_width,px_int
 	PX_Runtime* pRuntime=&pApp->runtime;
 	HANDLE hThread = (HANDLE)_beginthread(ThreadProcDSI, 1, pApp);
 
+	do
 	{
 		if(!PX_FontModuleInitialize(&pRuntime->mp_resources,&pApp->fontmodule))return PX_FALSE; //初始化字模库
 		if (!PX_LoadFontModuleFromFile(&pApp->fontmodule,"assets/font_Kesong_gbk_32.pxf")) return PX_FALSE; //加载字模
@@ -41,7 +42,7 @@ px_bool PX_ApplicationInitialize(PX_Application *pApp,px_int screen_width,px_int
 		if(!PX_JsonInitialize(&pRuntime->mp_resources,&pApp->book_successful_json)) return PX_FALSE;//初始化JSON库
 		if(!PX_LoadJsonFromFile(&pApp->book_successful_json,"assets/BookSuccessfulElement.json"))return PX_FALSE;//加载UI描述的JSON文件
 		pApp->book_successful_root=PX_UICreate(&pApp->ui,PX_NULL,&pApp->book_successful_json.rootValue,pRuntime->surface_width,pRuntime->surface_height);//从JSON中加载UI数据
-	}while(0)
+	}while(0);
 
 	PX_ObjectSetVisible(pApp->ui_root,1);
 	PX_ObjectSetVisible(pApp->info_root,0);
@@ -70,6 +71,9 @@ px_bool PX_ApplicationInitialize(PX_Application *pApp,px_int screen_width,px_int
 		PX_ObjectRegisterEvent(PX_UIGetObjectByID(&pApp->ui,"SwitchToBootUpPage_button3"),PX_OBJECT_EVENT_EXECUTE,PX_ApplicationReturnButtonClicked,pApp);
 
 		PX_ObjectRegisterEvent(PX_UIGetObjectByID(&pApp->ui,"SwitchToBootUpPage_button4"),PX_OBJECT_EVENT_EXECUTE,PX_ApplicationPageRefresh,pApp);
+		PX_ObjectRegisterEvent(PX_UIGetObjectByID(&pApp->ui,"InfoGrepButton"),PX_OBJECT_EVENT_EXECUTE,PX_ApplicationOnInfoGrepButtonClicked,pApp);
+		PX_ObjectRegisterEvent(PX_UIGetObjectByID(&pApp->ui,"DeleteAcceptButton"),PX_OBJECT_EVENT_EXECUTE,PX_ApplicationOnDeleteAcceptButtonClicked,pApp);
+		PX_ObjectRegisterEvent(PX_UIGetObjectByID(&pApp->ui,"DeleteRequestingButton"),PX_OBJECT_EVENT_EXECUTE,PX_ApplicationOnDeleteRequestingButtonClicked,pApp);
 	} while (0);
 
 	return PX_TRUE;

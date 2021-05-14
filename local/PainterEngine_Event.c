@@ -111,7 +111,18 @@ px_void PX_ApplicationInfoPageShowButtonClicked(PX_Object *pObject,PX_Object_Eve
 {
 	PX_Application *pApp=(PX_Application *)ptr;
 	PX_Runtime *pRuntime=&pApp->runtime;
+	PX_Object *SearchDateObject=PX_UIGetObjectByID(&pApp->ui,(const px_char*)"Date");
+	PX_Object *SearchFlightNoObject=PX_UIGetObjectByID(&pApp->ui,(const px_char*)"Flight");
+
+	px_char *FlightString=PX_Object_SelectBarGetCurrentText(SearchFlightNoObject);
+	if(!PX_strlen(FlightString)) goto __Error;
+	//判断是否有选定航班
+	//
 	goto_info_page(pApp);
+	return;
+__Error:
+	goto_check_fail_page(pApp);
+	// 如果以上为否 goto 
 }
 
 px_void PX_ApplicationReturnButtonClicked(PX_Object *pObject,PX_Object_Event e,px_void *ptr)
@@ -192,8 +203,7 @@ px_void update_SearchFlightNo_by_DateInfo(PX_Application* pApp,px_int Start_Time
 		{
 			if(!pNodeList) break;
 			pData=(PX_Json_Value*)pNodeList->pdata;
-			if(PX_JsonGetObjectValue(pData,"Date_Stamp")->_number!=Current_Time_Stamp)
-				break;
+			if(PX_JsonGetObjectValue(pData,"Date_Stamp")->_number!=Current_Time_Stamp) break;
 			PX_Object_SelectBarAddItem(SearchFlightNoObject,PX_JsonGetObjectValue(pData,"Flight No")->_string.buffer);
 		}
 	}
@@ -277,7 +287,7 @@ px_void PX_ApplicationOnSearchButtonClicked(PX_Object *pObject,PX_Object_Event e
 
 		while(date>cur) ++cur;
 
-		if(!rec[cur]) rec[cur-Start_Time_Stamp]=node;
+		if(!rec[cur-Start_Time_Stamp]) rec[cur-Start_Time_Stamp]=node;
 
 		node=node->pnext;
 	}
@@ -407,12 +417,11 @@ px_void PX_ApplicationOnBookButtonClicked(PX_Object *pObject,PX_Object_Event e,p
 		}while(0);
 
 		px_int i;
-		for(i=0;i<3;++i)
-			if(SeatTypein[i]>SeatCapacity[i]) goto __Error;
+//		for(i=0;i<3;++i)
+//			if(SeatTypein[i]>SeatCapacity[i]) goto __Error;
 		if(!SeatTypein[0]&&!SeatTypein[1]&&!SeatTypein[2]) goto __Error;
 	}while(0);
-	// 判断预定座位是否大于可用座位且预订了座位
-	//
+	// 判断是否预订了座位
 	do
 	{
 		PX_JsonInitialize(&pRuntime->mp_resources,&tmpJson);
@@ -517,11 +526,49 @@ px_void PX_ApplicationOnEnsureButtonClicked(PX_Object *pObject,PX_Object_Event e
 		}
 	}while(0);
 
-	PX_JsonArrayAddValue(PX_JsonGetObjectValue(pData,"Requesting"),&tmpJson.rootValue);
+	px_char *SeatTypeinString[3];
+	px_int SeatTypein[3];
+	px_bool flag=PX_TRUE;
+	do
+	{
+		PX_Object *SearchFlightSeatCapObject[3];
+		{
+			SearchFlightSeatCapObject[0]=PX_UIGetObjectByID(&pApp->ui,(const px_char*)"RightBorderText1");
+			SearchFlightSeatCapObject[1]=PX_UIGetObjectByID(&pApp->ui,(const px_char*)"RightBorderText2");
+			SearchFlightSeatCapObject[2]=PX_UIGetObjectByID(&pApp->ui,(const px_char*)"RightBorderText3");
+		}while(0);
 
-	PX_JsonGetArrayValue(PX_JsonGetObjectValue(pData,"OccupiedSeats"),0)->_number+=PX_JsonGetNumber(&tmpJson,"Ticket[0]");
-	PX_JsonGetArrayValue(PX_JsonGetObjectValue(pData,"OccupiedSeats"),1)->_number+=PX_JsonGetNumber(&tmpJson,"Ticket[1]");
-	PX_JsonGetArrayValue(PX_JsonGetObjectValue(pData,"OccupiedSeats"),2)->_number+=PX_JsonGetNumber(&tmpJson,"Ticket[2]");
+		px_int SeatCapacity[3];
+		{
+			px_int i;
+			for(i=0;i<3;++i) SeatCapacity[i]=PX_atoi(PX_Object_LabelGetText(SearchFlightSeatCapObject[i]));
+		}while(0);
+
+		PX_Object *SearchFlightSeatTypeinObject[3];
+		{
+			SearchFlightSeatTypeinObject[0]=PX_UIGetObjectByID(&pApp->ui,"RightEditText1");
+			SearchFlightSeatTypeinObject[1]=PX_UIGetObjectByID(&pApp->ui,"RightEditText2");
+			SearchFlightSeatTypeinObject[2]=PX_UIGetObjectByID(&pApp->ui,"RightEditText3");
+		}while(0);
+
+		do
+		{
+			px_int i;
+			for(i=0;i<3;++i)
+			{
+				SeatTypeinString[i]=PX_Object_EditGetText(SearchFlightSeatTypeinObject[i]);
+				SeatTypein[i]=PX_atoi(SeatTypeinString[i]);
+			}
+		}while(0);
+
+		px_int i;
+		for(i=0;i<3;++i) if(SeatTypein[i]>SeatCapacity[i]) flag=PX_FALSE;
+	}while(0);
+	PX_JsonArrayAddValue(PX_JsonGetObjectValue(pData,flag?"Accepted":"Requesting"),&tmpJson.rootValue);
+
+	PX_JsonGetArrayValue(PX_JsonGetObjectValue(pData,"OccupiedSeats"),0)->_number+=flag?PX_JsonGetNumber(&tmpJson,"Ticket[0]"):0;
+	PX_JsonGetArrayValue(PX_JsonGetObjectValue(pData,"OccupiedSeats"),1)->_number+=flag?PX_JsonGetNumber(&tmpJson,"Ticket[1]"):0;
+	PX_JsonGetArrayValue(PX_JsonGetObjectValue(pData,"OccupiedSeats"),2)->_number+=flag?PX_JsonGetNumber(&tmpJson,"Ticket[2]"):0;
 
 	Data_Write(pApp);
 
@@ -539,20 +586,398 @@ px_void PX_ApplicationPageRefresh(PX_Object *pObject,PX_Object_Event e,px_void *
 
 	PX_UIFree(&pApp->ui);
 	PX_UIInitialize(&pRuntime->mp_game,&pRuntime->mp_ui,&pApp->ui,&pApp->fontmodule);//初始化UI库
-	PX_LoadJsonFromFile(&pApp->ui_json,"assets/BootUpElement.json");
 	pApp->ui_root=PX_UICreate(&pApp->ui,PX_NULL,&pApp->ui_json.rootValue,pRuntime->surface_width,pRuntime->surface_height);//从JSON中加载UI数据
 
-	PX_LoadJsonFromFile(&pApp->info_json,"assets/InfoElement.json");
 	pApp->info_root=PX_UICreate(&pApp->ui,PX_NULL,&pApp->info_json.rootValue,pRuntime->surface_width,pRuntime->surface_height);//从JSON中加载UI数据
 
-	PX_LoadJsonFromFile(&pApp->check_fail_page_json,"assets/CheckFailed.json");
 	pApp->check_fail_page_root=PX_UICreate(&pApp->ui,PX_NULL,&pApp->check_fail_page_json.rootValue,pRuntime->surface_width,pRuntime->surface_height);//从JSON中加载UI数据
 
-	PX_LoadJsonFromFile(&pApp->ensure_page_json,"assets/ReassurePageElement.json");
 	pApp->ensure_page_root=PX_UICreate(&pApp->ui,PX_NULL,&pApp->ensure_page_json.rootValue,pRuntime->surface_width,pRuntime->surface_height);//从JSON中加载UI数据
 
-	PX_LoadJsonFromFile(&pApp->book_successful_json,"assets/BookSuccessfulElement.json");//加载UI描述的JSON文件
 	pApp->book_successful_root=PX_UICreate(&pApp->ui,PX_NULL,&pApp->book_successful_json.rootValue,pRuntime->surface_width,pRuntime->surface_height);//从JSON中加载UI数据
 
+	do
+	{
+		PX_ObjectRegisterEvent(PX_UIGetObjectByID(&pApp->ui,"start_time_yy"),PX_OBJECT_EVENT_VALUECHANGED,PX_ApplicationOnStartTimeSelectBarValueChanged,pApp);
+		PX_ObjectRegisterEvent(PX_UIGetObjectByID(&pApp->ui,"start_time_mm"),PX_OBJECT_EVENT_VALUECHANGED,PX_ApplicationOnStartTimeSelectBarValueChanged,pApp);
+		PX_ObjectRegisterEvent(PX_UIGetObjectByID(&pApp->ui,"end_time_yy"),PX_OBJECT_EVENT_VALUECHANGED,PX_ApplicationOnEndTimeSelectBarValueChanged,pApp);
+		PX_ObjectRegisterEvent(PX_UIGetObjectByID(&pApp->ui,"end_time_mm"),PX_OBJECT_EVENT_VALUECHANGED,PX_ApplicationOnEndTimeSelectBarValueChanged,pApp);
+		PX_ObjectRegisterEvent(PX_UIGetObjectByID(&pApp->ui,"search_button"),PX_OBJECT_EVENT_EXECUTE,PX_ApplicationOnSearchButtonClicked,pApp);
+		PX_ObjectRegisterEvent(PX_UIGetObjectByID(&pApp->ui,"Date"),PX_OBJECT_EVENT_VALUECHANGED,PX_ApplicationOnSearchDateChanged,pApp);
+		PX_ObjectRegisterEvent(PX_UIGetObjectByID(&pApp->ui,"Flight"),PX_OBJECT_EVENT_VALUECHANGED,PX_ApplicationOnSearchFlightNoChanged,pApp);
+		PX_ObjectRegisterEvent(PX_UIGetObjectByID(&pApp->ui,"Book_button"),PX_OBJECT_EVENT_EXECUTE,PX_ApplicationOnBookButtonClicked,pApp);
+		PX_ObjectRegisterEvent(PX_UIGetObjectByID(&pApp->ui,"EnsureButton"),PX_OBJECT_EVENT_EXECUTE,PX_ApplicationOnEnsureButtonClicked,pApp);
+
+		PX_ObjectRegisterEvent(PX_UIGetObjectByID(&pApp->ui,"SwitchToInfoPage_button"),PX_OBJECT_EVENT_EXECUTE,PX_ApplicationInfoPageShowButtonClicked,pApp);
+		PX_ObjectRegisterEvent(PX_UIGetObjectByID(&pApp->ui,"SwitchToBootUpPage_button"),PX_OBJECT_EVENT_EXECUTE,PX_ApplicationReturnButtonClicked,pApp);
+		PX_ObjectRegisterEvent(PX_UIGetObjectByID(&pApp->ui,"SwitchToBootUpPage_button2"),PX_OBJECT_EVENT_EXECUTE,PX_ApplicationReturnButtonClicked,pApp);
+		PX_ObjectRegisterEvent(PX_UIGetObjectByID(&pApp->ui,"SwitchToBootUpPage_button3"),PX_OBJECT_EVENT_EXECUTE,PX_ApplicationReturnButtonClicked,pApp);
+
+		PX_ObjectRegisterEvent(PX_UIGetObjectByID(&pApp->ui,"SwitchToBootUpPage_button4"),PX_OBJECT_EVENT_EXECUTE,PX_ApplicationPageRefresh,pApp);
+		PX_ObjectRegisterEvent(PX_UIGetObjectByID(&pApp->ui,"InfoGrepButton"),PX_OBJECT_EVENT_EXECUTE,PX_ApplicationOnInfoGrepButtonClicked,pApp);
+		PX_ObjectRegisterEvent(PX_UIGetObjectByID(&pApp->ui,"DeleteAcceptButton"),PX_OBJECT_EVENT_EXECUTE,PX_ApplicationOnDeleteAcceptButtonClicked,pApp);
+		PX_ObjectRegisterEvent(PX_UIGetObjectByID(&pApp->ui,"DeleteRequestingButton"),PX_OBJECT_EVENT_EXECUTE,PX_ApplicationOnDeleteRequestingButtonClicked,pApp);
+	} while (0);
+
 	goto_bootup_page(pApp);
+}
+
+px_void PX_ApplicationOnInfoGrepButtonClicked(PX_Object *pObject,PX_Object_Event e,px_void *ptr)
+{
+	PX_Application *pApp=(PX_Application *)ptr;
+	PX_Runtime *pRuntime=&pApp->runtime;
+	//初始化
+	px_char *Start_Time_Info[3],*End_Time_Info[3];
+	px_int End_Time_Int[3],Start_Time_Int[3];
+	px_int Start_Time_Stamp,End_Time_Stamp;
+	do
+	{
+		Start_Time_Info[0]=PX_Object_SelectBarGetCurrentText(PX_UIGetObjectByID(&pApp->ui,(const px_char*)"start_time_yy"));
+		Start_Time_Info[1]=PX_Object_SelectBarGetCurrentText(PX_UIGetObjectByID(&pApp->ui,(const px_char*)"start_time_mm"));
+		Start_Time_Info[2]=PX_Object_SelectBarGetCurrentText(PX_UIGetObjectByID(&pApp->ui,(const px_char*)"start_time_dd"));
+		Start_Time_Int[0]=PX_atoi(Start_Time_Info[0]);
+		Start_Time_Int[1]=PX_atoi(Start_Time_Info[1]);
+		Start_Time_Int[2]=PX_atoi(Start_Time_Info[2]);
+
+		End_Time_Info[0]=PX_Object_SelectBarGetCurrentText(PX_UIGetObjectByID(&pApp->ui,(const px_char*)"end_time_yy"));
+		End_Time_Info[1]=PX_Object_SelectBarGetCurrentText(PX_UIGetObjectByID(&pApp->ui,(const px_char*)"end_time_mm"));
+		End_Time_Info[2]=PX_Object_SelectBarGetCurrentText(PX_UIGetObjectByID(&pApp->ui,(const px_char*)"end_time_dd"));
+		End_Time_Int[0]=PX_atoi(End_Time_Info[0]);
+		End_Time_Int[1]=PX_atoi(End_Time_Info[1]);
+		End_Time_Int[2]=PX_atoi(End_Time_Info[2]);
+
+		Start_Time_Stamp=calc_Date_Stamp_by_int(Start_Time_Int[0],Start_Time_Int[1],Start_Time_Int[2]);
+		End_Time_Stamp=calc_Date_Stamp_by_int(End_Time_Int[0],End_Time_Int[1],End_Time_Int[2]);
+	}
+	while(0);// 获取开始时间结束时间
+
+	PX_Object *SearchDateObject=PX_UIGetObjectByID(&pApp->ui,(const px_char*)"Date");
+	PX_Object *SearchFlightNoObject=PX_UIGetObjectByID(&pApp->ui,(const px_char*)"Flight");
+
+	PX_Object_SelectBar *SearchFlightNoSelectBar=PX_Object_GetSelectBar(SearchFlightNoObject);
+	PX_Object_SelectBar *SearchDateSelectBar=PX_Object_GetSelectBar(SearchDateObject);
+
+	px_char *TimeString=PX_Object_SelectBarGetCurrentText(SearchDateObject);
+	px_int Current_Time_Stamp=calc_Date_Stamp(TimeString,"/");
+
+	px_list_node *pNode;
+	PX_Json_Value *pData;
+	do
+	{
+		for(pNode=rec[Current_Time_Stamp-Start_Time_Stamp];pNode;pNode=pNode->pnext)
+		{
+			pData=(PX_Json_Value*)pNode->pdata;
+			if(PX_JsonGetObjectValue(pData,"Date_Stamp")->_number!=Current_Time_Stamp)
+				break;
+			if(stringequal(PX_JsonGetObjectValue(pData,"Flight No")->_string.buffer,(px_char*)PX_Object_SelectBarGetCurrentText(SearchFlightNoObject))) break;
+		}
+	}while(0);
+	//寻找航班号对应的PX_Json_Value
+	px_char* __name,*__tele;
+	px_char* Name,*Tele;
+	PX_Object *NameObject,*TeleObject;
+	PX_Object *SeatObject[3];
+
+	do
+	{
+		NameObject=PX_UIGetObjectByID(&pApp->ui,"LeftMostEditText1");
+		TeleObject=PX_UIGetObjectByID(&pApp->ui,"LeftMostEditText2");
+		__name=PX_Object_EditGetText(NameObject);
+		__tele=PX_Object_EditGetText(TeleObject);
+	}
+	while(0);
+
+	if(!PX_strlen(__name)||!PX_strlen(__tele)) return;
+
+	do
+	{
+		PX_Json_Value *tmp;
+		for(pNode=PX_JsonGetObjectValue(pData,"Accepted")->_array.head;pNode;pNode=pNode->pnext)
+		{
+			tmp=pNode->pdata;
+			if(stringequal(PX_JsonGetObjectValue(tmp,"Name")->_string.buffer,__name)&&stringequal(PX_JsonGetObjectValue(tmp,"Tele")->_string.buffer,__tele)) break;
+		}
+		if(pNode)
+		{
+			SeatObject[0]=PX_UIGetObjectByID(&pApp->ui,"InfoLeftContentText1");
+			SeatObject[1]=PX_UIGetObjectByID(&pApp->ui,"InfoLeftContentText2");
+			SeatObject[2]=PX_UIGetObjectByID(&pApp->ui,"InfoLeftContentText3");
+
+			px_int i;
+			px_char tmprec[3][4];
+			PX_Json_Value *__tmpJsonValue;
+			__tmpJsonValue=PX_JsonGetObjectValue(tmp,"Ticket");
+			for(i=0;i<3;++i)
+			{
+				PX_itoa(PX_JsonGetArrayValue(__tmpJsonValue,i)->_number,tmprec[i],4,10);
+				PX_Object_LabelSetText(SeatObject[i],tmprec[i]);
+			}
+		}
+		else
+		{
+			px_int i;
+			SeatObject[0]=PX_UIGetObjectByID(&pApp->ui,"InfoLeftContentText1");
+			SeatObject[1]=PX_UIGetObjectByID(&pApp->ui,"InfoLeftContentText2");
+			SeatObject[2]=PX_UIGetObjectByID(&pApp->ui,"InfoLeftContentText3");
+			for(i=0;i<3;++i) PX_Object_LabelSetText(SeatObject[i],"");
+		}
+	}
+	while(0);//在已经成功订票的列表中寻找
+
+	do
+	{
+		PX_Json_Value *tmp;
+		for(pNode=PX_JsonGetObjectValue(pData,"Requesting")->_array.head;pNode;pNode=pNode->pnext)
+		{
+			tmp=pNode->pdata;
+			if(stringequal(PX_JsonGetObjectValue(tmp,"Name")->_string.buffer,__name)&&stringequal(PX_JsonGetObjectValue(tmp,"Tele")->_string.buffer,__tele)) break;
+		}
+		if(pNode)
+		{
+			SeatObject[0]=PX_UIGetObjectByID(&pApp->ui,"InfoRightContentText1");
+			SeatObject[1]=PX_UIGetObjectByID(&pApp->ui,"InfoRightContentText2");
+			SeatObject[2]=PX_UIGetObjectByID(&pApp->ui,"InfoRightContentText3");
+
+			px_int i;
+			px_char tmprec[3][4];
+			PX_Json_Value *__tmpJsonValue;
+			__tmpJsonValue=PX_JsonGetObjectValue(tmp,"Ticket");
+			for(i=0;i<3;++i)
+			{
+				PX_itoa(PX_JsonGetArrayValue(__tmpJsonValue,i)->_number,tmprec[i],4,10);
+				PX_Object_LabelSetText(SeatObject[i],tmprec[i]);
+			}
+		}
+		else
+		{
+			px_int i;
+			SeatObject[0]=PX_UIGetObjectByID(&pApp->ui,"InfoRightContentText1");
+			SeatObject[1]=PX_UIGetObjectByID(&pApp->ui,"InfoRightContentText2");
+			SeatObject[2]=PX_UIGetObjectByID(&pApp->ui,"InfoRightContentText3");
+			for(i=0;i<3;++i) PX_Object_LabelSetText(SeatObject[i],"");
+		}
+	}
+	while(0);//在未成功订票的列表中寻找
+}
+
+px_void PX_ApplicationOnDeleteAcceptButtonClicked(PX_Object *pObject,PX_Object_Event e,px_void *ptr)
+{
+	PX_Application *pApp=(PX_Application *)ptr;
+	PX_Runtime *pRuntime=&pApp->runtime;
+	//初始化
+	px_char *Start_Time_Info[3],*End_Time_Info[3];
+	px_int End_Time_Int[3],Start_Time_Int[3];
+	px_int Start_Time_Stamp,End_Time_Stamp;
+	do
+	{
+		Start_Time_Info[0]=PX_Object_SelectBarGetCurrentText(PX_UIGetObjectByID(&pApp->ui,(const px_char*)"start_time_yy"));
+		Start_Time_Info[1]=PX_Object_SelectBarGetCurrentText(PX_UIGetObjectByID(&pApp->ui,(const px_char*)"start_time_mm"));
+		Start_Time_Info[2]=PX_Object_SelectBarGetCurrentText(PX_UIGetObjectByID(&pApp->ui,(const px_char*)"start_time_dd"));
+		Start_Time_Int[0]=PX_atoi(Start_Time_Info[0]);
+		Start_Time_Int[1]=PX_atoi(Start_Time_Info[1]);
+		Start_Time_Int[2]=PX_atoi(Start_Time_Info[2]);
+
+		End_Time_Info[0]=PX_Object_SelectBarGetCurrentText(PX_UIGetObjectByID(&pApp->ui,(const px_char*)"end_time_yy"));
+		End_Time_Info[1]=PX_Object_SelectBarGetCurrentText(PX_UIGetObjectByID(&pApp->ui,(const px_char*)"end_time_mm"));
+		End_Time_Info[2]=PX_Object_SelectBarGetCurrentText(PX_UIGetObjectByID(&pApp->ui,(const px_char*)"end_time_dd"));
+		End_Time_Int[0]=PX_atoi(End_Time_Info[0]);
+		End_Time_Int[1]=PX_atoi(End_Time_Info[1]);
+		End_Time_Int[2]=PX_atoi(End_Time_Info[2]);
+
+		Start_Time_Stamp=calc_Date_Stamp_by_int(Start_Time_Int[0],Start_Time_Int[1],Start_Time_Int[2]);
+		End_Time_Stamp=calc_Date_Stamp_by_int(End_Time_Int[0],End_Time_Int[1],End_Time_Int[2]);
+	}
+	while(0);// 获取开始时间结束时间
+
+	PX_Object *SearchDateObject=PX_UIGetObjectByID(&pApp->ui,(const px_char*)"Date");
+	PX_Object *SearchFlightNoObject=PX_UIGetObjectByID(&pApp->ui,(const px_char*)"Flight");
+
+	PX_Object_SelectBar *SearchFlightNoSelectBar=PX_Object_GetSelectBar(SearchFlightNoObject);
+	PX_Object_SelectBar *SearchDateSelectBar=PX_Object_GetSelectBar(SearchDateObject);
+
+	px_char *TimeString=PX_Object_SelectBarGetCurrentText(SearchDateObject);
+	px_int Current_Time_Stamp=calc_Date_Stamp(TimeString,"/");
+
+	px_list_node *pNode;
+	PX_Json_Value *pData;
+	do
+	{
+		for(pNode=rec[Current_Time_Stamp-Start_Time_Stamp];pNode;pNode=pNode->pnext)
+		{
+			pData=(PX_Json_Value*)pNode->pdata;
+			if(PX_JsonGetObjectValue(pData,"Date_Stamp")->_number!=Current_Time_Stamp)
+				break;
+			if(stringequal(PX_JsonGetObjectValue(pData,"Flight No")->_string.buffer,(px_char*)PX_Object_SelectBarGetCurrentText(SearchFlightNoObject))) break;
+		}
+	}while(0);
+	//寻找航班号对应的PX_Json_Value
+	px_char* __name,*__tele;
+	px_char* Name,*Tele;
+	PX_Object *NameObject,*TeleObject;
+	PX_Object *SeatObject[3];
+
+	do
+	{
+		px_int _;
+		NameObject=PX_UIGetObjectByID(&pApp->ui,"LeftMostEditText1");
+		TeleObject=PX_UIGetObjectByID(&pApp->ui,"LeftMostEditText2");
+		__name=PX_Object_EditGetText(NameObject);
+		__tele=PX_Object_EditGetText(TeleObject);
+		if(!PX_strlen(__name)||!PX_strlen(__tele)) return;
+		SeatObject[0]=PX_UIGetObjectByID(&pApp->ui,"InfoLeftContentText1");
+		SeatObject[1]=PX_UIGetObjectByID(&pApp->ui,"InfoLeftContentText2");
+		SeatObject[2]=PX_UIGetObjectByID(&pApp->ui,"InfoLeftContentText3");
+		for(_=0;_<3;++_) if(!PX_strlen(PX_Object_LabelGetText(SeatObject[_]))) return;
+	}
+	while(0);
+
+	do
+	{
+		PX_Json_Value *tmp;
+		for(pNode=PX_JsonGetObjectValue(pData,"Accepted")->_array.head;pNode;pNode=pNode->pnext)
+		{
+			tmp=pNode->pdata;
+			if(stringequal(PX_JsonGetObjectValue(tmp,"Name")->_string.buffer,__name)&&stringequal(PX_JsonGetObjectValue(tmp,"Tele")->_string.buffer,__tele)) break;
+		}
+		if(pNode)
+		{
+			px_int i;
+			PX_Json_Value *__tmpJsonValue;
+			__tmpJsonValue=PX_JsonGetObjectValue(tmp,"Ticket");
+			for(i=0;i<3;++i)
+				PX_JsonGetArrayValue(PX_JsonGetObjectValue(pData,"OccupiedSeats"),i)->_number-=PX_JsonGetArrayValue(__tmpJsonValue,i)->_number;
+			PX_JsonFreeValue(PX_NULL,tmp);
+			PX_ListPop(&PX_JsonGetObjectValue(pData,"Accepted")->_array,pNode);
+		}
+	}
+	while(0);//寻找并删除
+
+	do
+	{
+		px_int Seat_Capacity[3];
+		px_int _;
+		for(_=0;_<3;++_)
+			Seat_Capacity[_]=PX_JsonGetArrayValue(PX_JsonGetObjectValue(pData,"Seats"),_)->_number-PX_JsonGetArrayValue(PX_JsonGetObjectValue(pData,"OccupiedSeats"),_)->_number;
+		PX_Json_Value *tmp;
+		PX_Json_Value *__tmpJsonValue;
+		for(pNode=PX_JsonGetObjectValue(pData,"Requesting")->_array.head;pNode;pNode=pNode->pnext)
+		{
+			tmp=pNode->pdata;
+			__tmpJsonValue=PX_JsonGetObjectValue(tmp,"Ticket");
+			for(_=0;_<3;++_)
+				if(PX_JsonGetArrayValue(__tmpJsonValue,_)->_number>Seat_Capacity[_]) break;
+			if(_==3) break;
+		}
+
+		if(pNode)
+		{
+			PX_JsonArrayAddValue(PX_JsonGetObjectValue(pData,"Accepted"),tmp);
+			for(_=0;_<3;++_)
+				PX_JsonGetArrayValue(PX_JsonGetObjectValue(pData,"OccupiedSeats"),_)->_number+=PX_JsonGetArrayValue(__tmpJsonValue,_)->_number;
+
+			PX_ListPop(&PX_JsonGetObjectValue(pData,"Requesting")->_array,pNode);
+		}
+	}
+	while(0);//在未成功订票的列表中寻找
+
+	Data_Write(pApp);
+
+	goto_successful_page(pApp);
+}
+
+px_void PX_ApplicationOnDeleteRequestingButtonClicked(PX_Object *pObject,PX_Object_Event e,px_void *ptr)
+{
+	PX_Application *pApp=(PX_Application *)ptr;
+	PX_Runtime *pRuntime=&pApp->runtime;
+	//初始化
+	px_char *Start_Time_Info[3],*End_Time_Info[3];
+	px_int End_Time_Int[3],Start_Time_Int[3];
+	px_int Start_Time_Stamp,End_Time_Stamp;
+	do
+	{
+		Start_Time_Info[0]=PX_Object_SelectBarGetCurrentText(PX_UIGetObjectByID(&pApp->ui,(const px_char*)"start_time_yy"));
+		Start_Time_Info[1]=PX_Object_SelectBarGetCurrentText(PX_UIGetObjectByID(&pApp->ui,(const px_char*)"start_time_mm"));
+		Start_Time_Info[2]=PX_Object_SelectBarGetCurrentText(PX_UIGetObjectByID(&pApp->ui,(const px_char*)"start_time_dd"));
+		Start_Time_Int[0]=PX_atoi(Start_Time_Info[0]);
+		Start_Time_Int[1]=PX_atoi(Start_Time_Info[1]);
+		Start_Time_Int[2]=PX_atoi(Start_Time_Info[2]);
+
+		End_Time_Info[0]=PX_Object_SelectBarGetCurrentText(PX_UIGetObjectByID(&pApp->ui,(const px_char*)"end_time_yy"));
+		End_Time_Info[1]=PX_Object_SelectBarGetCurrentText(PX_UIGetObjectByID(&pApp->ui,(const px_char*)"end_time_mm"));
+		End_Time_Info[2]=PX_Object_SelectBarGetCurrentText(PX_UIGetObjectByID(&pApp->ui,(const px_char*)"end_time_dd"));
+		End_Time_Int[0]=PX_atoi(End_Time_Info[0]);
+		End_Time_Int[1]=PX_atoi(End_Time_Info[1]);
+		End_Time_Int[2]=PX_atoi(End_Time_Info[2]);
+
+		Start_Time_Stamp=calc_Date_Stamp_by_int(Start_Time_Int[0],Start_Time_Int[1],Start_Time_Int[2]);
+		End_Time_Stamp=calc_Date_Stamp_by_int(End_Time_Int[0],End_Time_Int[1],End_Time_Int[2]);
+	}
+	while(0);// 获取开始时间结束时间
+
+	PX_Object *SearchDateObject=PX_UIGetObjectByID(&pApp->ui,(const px_char*)"Date");
+	PX_Object *SearchFlightNoObject=PX_UIGetObjectByID(&pApp->ui,(const px_char*)"Flight");
+
+	PX_Object_SelectBar *SearchFlightNoSelectBar=PX_Object_GetSelectBar(SearchFlightNoObject);
+	PX_Object_SelectBar *SearchDateSelectBar=PX_Object_GetSelectBar(SearchDateObject);
+
+	px_char *TimeString=PX_Object_SelectBarGetCurrentText(SearchDateObject);
+	px_int Current_Time_Stamp=calc_Date_Stamp(TimeString,"/");
+
+	px_list_node *pNode;
+	PX_Json_Value *pData;
+	do
+	{
+		for(pNode=rec[Current_Time_Stamp-Start_Time_Stamp];pNode;pNode=pNode->pnext)
+		{
+			pData=(PX_Json_Value*)pNode->pdata;
+			if(PX_JsonGetObjectValue(pData,"Date_Stamp")->_number!=Current_Time_Stamp)
+				break;
+			if(stringequal(PX_JsonGetObjectValue(pData,"Flight No")->_string.buffer,(px_char*)PX_Object_SelectBarGetCurrentText(SearchFlightNoObject))) break;
+		}
+	}while(0);
+	//寻找航班号对应的PX_Json_Value
+	px_char* __name,*__tele;
+	px_char* Name,*Tele;
+	PX_Object *NameObject,*TeleObject;
+	PX_Object *SeatObject[3];
+	px_int _;
+
+	do
+	{
+		NameObject=PX_UIGetObjectByID(&pApp->ui,"LeftMostEditText1");
+		TeleObject=PX_UIGetObjectByID(&pApp->ui,"LeftMostEditText2");
+		__name=PX_Object_EditGetText(NameObject);
+		__tele=PX_Object_EditGetText(TeleObject);
+	}
+	while(0);
+
+	if(!PX_strlen(__name)||!PX_strlen(__tele)) return;
+
+	SeatObject[0]=PX_UIGetObjectByID(&pApp->ui,"InfoRightContentText1");
+	SeatObject[1]=PX_UIGetObjectByID(&pApp->ui,"InfoRightContentText2");
+	SeatObject[2]=PX_UIGetObjectByID(&pApp->ui,"InfoRightContentText3");
+
+	for(_=0;_<3;++_) if(!PX_strlen(PX_Object_LabelGetText(SeatObject[_]))) return;
+
+	do
+	{
+		PX_Json_Value *tmp;
+		for(pNode=PX_JsonGetObjectValue(pData,"Requesting")->_array.head;pNode;pNode=pNode->pnext)
+		{
+			tmp=pNode->pdata;
+			if(stringequal(PX_JsonGetObjectValue(tmp,"Name")->_string.buffer,__name)&&stringequal(PX_JsonGetObjectValue(tmp,"Tele")->_string.buffer,__tele)) break;
+		}
+		if(pNode)
+		{
+			PX_Json_Value *__tmpJsonValue;
+			__tmpJsonValue=PX_JsonGetObjectValue(tmp,"Ticket");
+			PX_JsonFreeValue(PX_NULL,tmp);
+			PX_ListPop(&PX_JsonGetObjectValue(pData,"Requesting")->_array,pNode);
+		}
+	}
+	while(0);//寻找并删除
+
+	Data_Write(pApp);
+
+	goto_successful_page(pApp);
 }

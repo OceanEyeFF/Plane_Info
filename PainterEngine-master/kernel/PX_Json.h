@@ -55,6 +55,7 @@ px_bool PX_JsonParse(PX_Json *pjson,const px_char *json_content);
 px_bool PX_JsonBuild_Value(PX_Json_Value *pValue,px_string *_out,px_bool bArrayValue);
 px_bool PX_JsonBuild(PX_Json *pjson,px_string *_out);
 px_void PX_JsonDelete(PX_Json *pjson,const px_char payload[]);
+px_void PX_JsonFreeValue(PX_Json *pjson,PX_Json_Value *json_Value);
 px_void PX_JsonFree(PX_Json *pjson);
 
 

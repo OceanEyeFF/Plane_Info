@@ -3,9 +3,6 @@
 target :=PainterEngine.exe
 project_path := E:/Plane_Info/local
 painterengine_path := E:/Plane_Info/PainterEngine-master
-CC=gcc
-C++=g++
-Link=g++
 #####################################################
 
 project_build := $(wildcard $(project_path)/*.c)
@@ -35,28 +32,28 @@ all:$(project_build_o)  $(painterengine_build_painterengine_o)
 	-I "$(painterengine_path)" \
 	-I "$(project_path)" \
 	-I "$(painterengine_path)/platform/windows" \
-	-L. -lwinmm -ld2d1 -lws2_32 -ldsound -lcomdlg32 -g
+	-L. -lwinmm -ld2d1 -lws2_32 -ldsound -lcomdlg32 -mwindows -O2
 	$(target)
 	make cleanproject
 	
 
 $(project_path)/%.o:$(project_path)/%.cpp
-	g++ -c $^ -o $@ -I "$(painterengine_path)" -I "$(painterengine_path)/platform/windows" -g
+	g++ -c $^ -o $@ -I "$(painterengine_path)" -I "$(painterengine_path)/platform/windows" -O2
 
 $(project_path)/%.o:$(project_path)/%.c
-	gcc -c $^ -o $@ -I "$(painterengine_path)" -I "$(painterengine_path)/platform/windows" -g
+	gcc -c $^ -o $@ -I "$(painterengine_path)" -I "$(painterengine_path)/platform/windows" -O2
 
 $(painterengine_path)/architecture/%.o:$(painterengine_path)/architecture/%.c 
-	gcc -c $^ -o $@ -I "$(painterengine_path)" -g
+	gcc -c $^ -o $@ -I "$(painterengine_path)" -O2
 
 $(painterengine_path)/kernel/%.o:$(painterengine_path)/kernel/%.c
-	gcc -c $^ -o $@ -g
+	gcc -c $^ -o $@ -O2
 
 $(painterengine_path)/core/%.o:$(painterengine_path)/core/%.c
-	gcc -c $^ -o $@ -g
+	gcc -c $^ -o $@ -O2
 
 $(painterengine_path)/platform/windows/%.o:$(painterengine_path)/platform/windows/%.c
-	gcc -c $^ -o $@ -I "$(project_path)" -I "$(painterengine_path)" -I "$(painterengine_path)/platform/windows" -g
+	gcc -c $^ -o $@ -I "$(project_path)" -I "$(painterengine_path)" -I "$(painterengine_path)/platform/windows" -O2
 
 
 .PHONY:cleanall

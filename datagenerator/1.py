@@ -20,13 +20,13 @@ def randomDateList(start, end, n, frmt='%Y-%m-%d'):
     return [randomDate(start, end, frmt) for _ in xrange(n)]
 
 start_time="2020-01-01"
-end_time  ="2020-01-06"
+end_time  ="2020-12-31"
 
 if __name__=="__main__":
     file=open("base.json","r")
     source=json.load(file)
     data=[]
-    for i in range(30):
+    for i in range(200000):
         #Dep=source['AirportList'][random.randint(0,len(source['AirportList']))]
         Dep=random.choice(source['AirportList'])
         Arv=random.choice(source['AirportList'])
@@ -43,14 +43,23 @@ if __name__=="__main__":
                 'Date':Date,
                 'Seats':[10,20,100],
                 'OccupiedSeats':[0,0,0],
-                'Requesting':[
+                'Accepted':
+                [
+                        {
+                    'Ticket':[0,0,0],
+                    'Name':r"Null",
+                    'Tele':r"NUll",
+                    },
+                ],
+                'Requesting':
+                [
                         {
                     'Ticket':[0,0,0],
                     'Name':r"Null",
                     'Tele':r"NUll",
                     },
 
-                    ]
+                ]
         }
         data.append(tmp)
     output={
