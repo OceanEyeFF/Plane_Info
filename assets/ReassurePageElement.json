@@ -1,0 +1,275 @@
+{
+	"label":
+	{
+		"id": "Reassure Title", //可选参数,控件id
+		"x": -300, //可选参数,控件x坐标,默认为0
+		"y": -282, //可选参数,控件y坐标,默认为0
+		"width": 600, //可选参数,控件宽度,默认为0
+		"height": 32, //可选参数,控件高度,默认为0
+		//"length": 112, 可选参数,控件长度,默认为0 3D控件
+		"halign": "mid", //可选参数,水平对齐方式
+		"valign": "mid", //可选参数,水平垂直方式
+		"text": "信息检查页面",
+		"align": "center",
+		"align":"center",
+		"fontcolor": [255,192,192,192]
+	},
+	"pushbutton":
+	{
+		"id":"SwitchToBootUpPage_button3",
+		"x": -200,
+		"y": 200,
+		"width": 160,
+		"height": 32,
+		"halign": "mid", //可选参数,水平对齐方式
+		"valign": "mid", //可选参数,垂直对齐方式
+		"style":"round",
+		"border": true,
+		"cursorcolor":[255,32,32,32],
+		"pushcolor":[255,32,32,32],
+		"backgroundcolor":[255,64,64,64],
+		"fontcolor": [255,192,192,192],
+		"align":"center",
+		"text":"返回修改"
+	},
+	"pushbutton":
+	{
+		"id":"EnsureButton",
+		"x": 40,
+		"y": 200,
+		"width": 160,
+		"height": 32,
+		"halign": "mid", //可选参数,水平对齐方式
+		"valign": "mid", //可选参数,垂直对齐方式
+		"style":"round",
+		"border": true,
+		"cursorcolor":[255,32,32,32],
+		"pushcolor":[255,32,32,32],
+		"backgroundcolor":[255,64,64,64],
+		"fontcolor": [255,192,192,192],
+		"align":"center",
+		"text":"确认无误"
+	},
+//---------------------------------
+	"label":
+	{
+		"id": "ReassureDateTitle", //可选参数,控件id
+		"x": -144, //可选参数,控件x坐标,默认为0
+		"y": -204, //可选参数,控件y坐标,默认为0
+		"width": 150, //可选参数,控件宽度,默认为0
+		"height": 38, //可选参数,控件高度,默认为0
+		//"length": 112, 可选参数,控件长度,默认为0 3D控件
+		"halign": "mid", //可选参数,水平对齐方式
+		"valign": "mid", //可选参数,水平垂直方式
+		"align": "center",
+		"text": "日期",
+		"align":"center",
+		"fontcolor": [255,192,192,192]
+	},
+	"label":
+	{
+		"id": "ReassureDateContext",
+		"x" : 6,
+		"y" : -204,
+		"width": 160, //可选参数,控件宽度,默认为0
+		"height": 38,
+		"halign": "mid", //可选参数,水平对齐方式
+		"valign": "mid", //可选参数,垂直对齐方式
+		"fontcolor": [255,192,192,192],
+		"style":"round",
+		"border":true,
+		"align":"center"
+	},
+	"label":
+	{
+		"id": "ReassureFlightTitle", //可选参数,控件id
+		"x": -144, //可选参数,控件x坐标,默认为0
+		"y": -152, //可选参数,控件y坐标,默认为0
+		"width": 150, //可选参数,控件宽度,默认为0
+		"height": 38, //可选参数,控件高度,默认为0
+		//"length": 112, 可选参数,控件长度,默认为0 3D控件
+		"halign": "mid", //可选参数,水平对齐方式
+		"valign": "mid", //可选参数,水平垂直方式
+		"align": "center",
+		"text": "Flight No.",
+		"align":"center",
+		"fontcolor": [255,192,192,192]
+	},
+	"label":
+	{
+		"id": "ReassureFlightContext",
+		"x" : 6,
+		"y" : -152,
+		"width": 160, //可选参数,控件宽度,默认为0
+		"height": 38,
+		"halign": "mid", //可选参数,水平对齐方式
+		"valign": "mid", //可选参数,垂直对齐方式
+		"fontcolor": [255,192,192,192],
+		"style":"round",
+		"border":true,
+		"align":"center"
+	},
+//---------------------------------
+	"label":
+	{
+		"id": "ReassureTitleText1", //可选参数,控件id
+		"x": 6, //可选参数,控件x坐标,默认为0
+		"y": -100, //可选参数,控件y坐标,默认为0
+		"width": 90, //可选参数,控件宽度,默认为0
+		"height": 38, //可选参数,控件高度,默认为0
+		//"length": 112, 可选参数,控件长度,默认为0 3D控件
+		"border":false,
+		"halign": "mid", //可选参数,水平对齐方式
+		"valign": "mid", //可选参数,水平垂直方式
+		"align": "center",
+		"text": "头等舱",
+		"align":"center",
+		"fontcolor": [255,192,192,192]
+	},
+	"label":
+	{
+		"id": "ReassureTitleText2", //可选参数,控件id
+		"x": 96, //可选参数,控件x坐标,默认为0
+		"y": -100, //可选参数,控件y坐标,默认为0
+		"width": 90, //可选参数,控件宽度,默认为0
+		"height": 38, //可选参数,控件高度,默认为0
+		//"length": 112, 可选参数,控件长度,默认为0 3D控件
+		"border":false,
+		"halign": "mid", //可选参数,水平对齐方式
+		"valign": "mid", //可选参数,水平垂直方式
+		"align": "center",
+		"text": "商务舱",
+		"align":"center",
+		"fontcolor": [255,192,192,192]
+	},
+	"label":
+	{
+		"id": "ReassureTitleText3", //可选参数,控件id
+		"x": 186, //可选参数,控件x坐标,默认为0
+		"y": -100, //可选参数,控件y坐标,默认为0
+		"width": 90, //可选参数,控件宽度,默认为0
+		"height": 38, //可选参数,控件高度,默认为0
+		//"length": 112, 可选参数,控件长度,默认为0 3D控件
+		"border":false,
+		"halign": "mid", //可选参数,水平对齐方式
+		"valign": "mid", //可选参数,水平垂直方式
+		"align": "center",
+		"text": "经济舱",
+		"align":"center",
+		"fontcolor": [255,192,192,192]
+	},
+	"label":
+	{
+		"id": "ReassureBookSeatTitle", //可选参数,控件id
+		"x": -144, //可选参数,控件x坐标,默认为0
+		"y": 4, //可选参数,控件y坐标,默认为0
+		"width": 150, //可选参数,控件宽度,默认为0
+		"height": 38, //可选参数,控件高度,默认为0
+		//"length": 112, 可选参数,控件长度,默认为0 3D控件
+		"halign": "mid", //可选参数,水平对齐方式
+		"valign": "mid", //可选参数,水平垂直方式
+		"align": "center",
+		"text": "预定座位",
+		"align":"center",
+		"fontcolor": [255,192,192,192]
+	},
+	"label":
+	{
+		"id": "ReassureBookSeat1", //可选参数,控件id
+		"x": 6, //可选参数,控件x坐标,默认为0
+		"y": 4, //可选参数,控件y坐标,默认为0
+		"width": 90, //可选参数,控件宽度,默认为0
+		"height": 38, //可选参数,控件高度,默认为0
+		//"length": 112, 可选参数,控件长度,默认为0 3D控件
+		"border":true,
+		"halign": "mid", //可选参数,水平对齐方式
+		"valign": "mid", //可选参数,水平垂直方式
+		"align": "center",
+		"fontcolor": [255,192,192,192]
+	},
+	"label":
+	{
+		"id": "ReassureBookSeat2", //可选参数,控件id
+		"x": 96, //可选参数,控件x坐标,默认为0
+		"y": 4, //可选参数,控件y坐标,默认为0
+		"width": 90, //可选参数,控件宽度,默认为0
+		"height": 38, //可选参数,控件高度,默认为0
+		//"length": 112, 可选参数,控件长度,默认为0 3D控件
+		"border":true,
+		"halign": "mid", //可选参数,水平对齐方式
+		"valign": "mid", //可选参数,水平垂直方式
+		"align": "center",
+		"fontcolor": [255,192,192,192]
+	},
+	"label":
+	{
+		"id": "ReassureBookSeat3", //可选参数,控件id
+		"x": 186, //可选参数,控件x坐标,默认为0
+		"y": 4, //可选参数,控件y坐标,默认为0
+		"width": 90, //可选参数,控件宽度,默认为0
+		"height": 38, //可选参数,控件高度,默认为0
+		//"length": 112, 可选参数,控件长度,默认为0 3D控件
+		"border":true,
+		"halign": "mid", //可选参数,水平对齐方式
+		"valign": "mid", //可选参数,水平垂直方式
+		"align": "center",
+		"fontcolor": [255,192,192,192]
+	},
+//---------------------------------
+	"label":
+	{
+		"id": "ReassureNameTitle", //可选参数,控件id
+		"x": -144, //可选参数,控件x坐标,默认为0
+		"y": 108, //可选参数,控件y坐标,默认为0
+		"width": 150, //可选参数,控件宽度,默认为0
+		"height": 38, //可选参数,控件高度,默认为0
+		//"length": 112, 可选参数,控件长度,默认为0 3D控件
+		"halign": "mid", //可选参数,水平对齐方式
+		"valign": "mid", //可选参数,水平垂直方式
+		"align": "center",
+		"text": "姓名",
+		"fontcolor": [255,192,192,192]
+	},
+	"label":
+	{
+		"id": "ReassureNameContext", //可选参数,控件id
+		"x": 6, //可选参数,控件x坐标,默认为0
+		"y": 108, //可选参数,控件y坐标,默认为0
+		"width": 270, //可选参数,控件宽度,默认为0
+		"height": 38, //可选参数,控件高度,默认为0
+		//"length": 112, 可选参数,控件长度,默认为0 3D控件
+		"border":true,
+		"halign": "mid", //可选参数,水平对齐方式
+		"valign": "mid", //可选参数,水平垂直方式
+		"align": "center",
+		"fontcolor": [255,192,192,192]
+	},
+	"label":
+	{
+		"id": "ReassureTeleTitle", //可选参数,控件id
+		"x": -144, //可选参数,控件x坐标,默认为0
+		"y": 160, //可选参数,控件y坐标,默认为0
+		"width": 150, //可选参数,控件宽度,默认为0
+		"height": 38, //可选参数,控件高度,默认为0
+		//"length": 112, 可选参数,控件长度,默认为0 3D控件
+		"halign": "mid", //可选参数,水平对齐方式
+		"valign": "mid", //可选参数,水平垂直方式
+		"align": "center",
+		"text": "手机号码",
+		"fontcolor": [255,192,192,192]
+	},
+	"label":
+	{
+		"id": "ReassureTeleContext", //可选参数,控件id
+		"x": 6, //可选参数,控件x坐标,默认为0
+		"y": 160, //可选参数,控件y坐标,默认为0
+		"width": 270, //可选参数,控件宽度,默认为0
+		"height": 38, //可选参数,控件高度,默认为0
+		//"length": 112, 可选参数,控件长度,默认为0 3D控件
+		"border":true,
+		"halign": "mid", //可选参数,水平对齐方式
+		"valign": "mid", //可选参数,水平垂直方式
+		"align": "center",
+		"fontcolor": [255,192,192,192]
+	}
+}

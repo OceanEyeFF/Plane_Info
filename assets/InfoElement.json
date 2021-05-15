@@ -1,0 +1,374 @@
+{
+	"label":
+	{
+		"id": "LeftTitle", //可选参数,控件id
+		"x": 10, //可选参数,控件x坐标,默认为0
+		"y": -204, //可选参数,控件y坐标,默认为0
+		"width": 150, //可选参数,控件宽度,默认为0
+		"height": 32, //可选参数,控件高度,默认为0
+		//"length": 112, 可选参数,控件长度,默认为0 3D控件
+		"halign": "left", //可选参数,水平对齐方式
+		"valign": "mid", //可选参数,水平垂直方式
+		"align": "center",
+		"text": "删除页面",
+		"align":"center",
+		"fontcolor": [255,192,192,192]
+	},
+	//-----------------------------------
+	"label":
+	{
+		"id": "InfoLeftMostTitle1", //可选参数,控件id
+		"x": 4, //可选参数,控件x坐标,默认为0
+		"y": -85, //可选参数,控件y坐标,默认为0
+		"width": 80, //可选参数,控件宽度,默认为0
+		"height": 38, //可选参数,控件高度,默认为0
+		//"length": 112, 可选参数,控件长度,默认为0 3D控件
+		"border":false,
+		"halign": "left", //可选参数,水平对齐方式
+		"valign": "mid", //可选参数,水平垂直方式
+		"align": "center",
+		"text": "姓名",
+		"align":"center",
+		"fontcolor": [255,192,192,192]
+	},
+	"label":
+	{
+		"id": "InfoLeftMostTitle2", //可选参数,控件id
+		"x": 4, //可选参数,控件x坐标,默认为0
+		"y": 3, //可选参数,控件y坐标,默认为0
+		"width": 80, //可选参数,控件宽度,默认为0
+		"height": 38, //可选参数,控件高度,默认为0
+		//"length": 112, 可选参数,控件长度,默认为0 3D控件
+		"border":false,
+		"halign": "left", //可选参数,水平对齐方式
+		"valign": "mid", //可选参数,水平垂直方式
+		"align": "center",
+		"text": "电话",
+		"align":"center",
+		"fontcolor": [255,192,192,192]
+	},
+	"edit":
+	{
+		"id": "LeftMostEditText1", //可选参数,控件id
+		"x": 42, //可选参数,控件x坐标,默认为0
+		"y": -41, //可选参数,控件y坐标,默认为0
+		"width": 180, //可选参数,控件宽度,默认为0
+		"height": 38, //可选参数,控件高度,默认为0
+		//"length": 112, 可选参数,控件长度,默认为0 3D控件
+		"border":true,
+		"halign": "left", //可选参数,水平对齐方式
+		"valign": "mid", //可选参数,水平垂直方式
+		"align": "center",
+		"fontcolor": [255,192,192,192]
+	},
+	"edit":
+	{
+		"id": "LeftMostEditText2", //可选参数,控件id
+		"x": 42, //可选参数,控件x坐标,默认为0
+		"y": 47, //可选参数,控件y坐标,默认为0
+		"width": 180, //可选参数,控件宽度,默认为0
+		"height": 38, //可选参数,控件高度,默认为0
+		//"length": 112, 可选参数,控件长度,默认为0 3D控件
+		"limit":"0123456789",
+		"border":true,
+		"halign": "left", //可选参数,水平对齐方式
+		"valign": "mid", //可选参数,水平垂直方式
+		"align": "center",
+		"fontcolor": [255,192,192,192]
+	},
+	"pushbutton":
+	{
+		"id":"InfoGrepButton",
+		"x": 34,
+		"y": 135,
+		"width": 150,
+		"height": 38,
+		"halign": "left", //可选参数,水平对齐方式
+		"valign": "mid", //可选参数,垂直对齐方式
+		"style":"round",
+		"border": true,
+		"cursorcolor":[255,32,32,32],
+		"pushcolor":[255,32,32,32],
+		"backgroundcolor":[255,64,64,64],
+		"fontcolor": [255,192,192,192],
+		"align":"center",
+		"text":"查找记录!"
+	},
+	//-----------------------------------
+	"label":
+	{
+		"id": "InfoLeftHigherText1", //可选参数,控件id
+		"x": -306, //可选参数,控件x坐标,默认为0
+		"y": -100, //可选参数,控件y坐标,默认为0
+		"width": 152, //可选参数,控件宽度,默认为0
+		"height": 38, //可选参数,控件高度,默认为0
+		//"length": 112, 可选参数,控件长度,默认为0 3D控件
+		"border":false,
+		"halign": "mid", //可选参数,水平对齐方式
+		"valign": "mid", //可选参数,水平垂直方式
+		"align": "center",
+		"text": "成功预订",
+		"align":"center",
+		"fontcolor": [255,192,192,192]
+	},
+	"label":
+	{
+		"id": "InfoLeftTitleText1", //可选参数,控件id
+		"x": -306, //可选参数,控件x坐标,默认为0
+		"y": -56, //可选参数,控件y坐标,默认为0
+		"width": 100, //可选参数,控件宽度,默认为0
+		"height": 38, //可选参数,控件高度,默认为0
+		//"length": 112, 可选参数,控件长度,默认为0 3D控件
+		"border":false,
+		"halign": "mid", //可选参数,水平对齐方式
+		"valign": "mid", //可选参数,水平垂直方式
+		"align": "center",
+		"text": "头等舱",
+		"align":"center",
+		"fontcolor": [255,192,192,192]
+	},
+	"label":
+	{
+		"id": "InfoLeftTitleText2", //可选参数,控件id
+		"x": -206, //可选参数,控件x坐标,默认为0
+		"y": -56, //可选参数,控件y坐标,默认为0
+		"width": 100, //可选参数,控件宽度,默认为0
+		"height": 38, //可选参数,控件高度,默认为0
+		//"length": 112, 可选参数,控件长度,默认为0 3D控件
+		"border":false,
+		"halign": "mid", //可选参数,水平对齐方式
+		"valign": "mid", //可选参数,水平垂直方式
+		"align": "center",
+		"text": "商务舱",
+		"align":"center",
+		"fontcolor": [255,192,192,192]
+	},
+	"label":
+	{
+		"id": "InfoLeftTitleText3", //可选参数,控件id
+		"x": -106, //可选参数,控件x坐标,默认为0
+		"y": -56, //可选参数,控件y坐标,默认为0
+		"width": 100, //可选参数,控件宽度,默认为0
+		"height": 38, //可选参数,控件高度,默认为0
+		//"length": 112, 可选参数,控件长度,默认为0 3D控件
+		"border":false,
+		"halign": "mid", //可选参数,水平对齐方式
+		"valign": "mid", //可选参数,水平垂直方式
+		"align": "center",
+		"text": "经济舱",
+		"align":"center",
+		"fontcolor": [255,192,192,192]
+	},
+	"label":
+	{
+		"id": "InfoLeftContentText1", //可选参数,控件id
+		"x": -306, //可选参数,控件x坐标,默认为0
+		"y": -12, //可选参数,控件y坐标,默认为0
+		"width": 100, //可选参数,控件宽度,默认为0
+		"height": 38, //可选参数,控件高度,默认为0
+		//"length": 112, 可选参数,控件长度,默认为0 3D控件
+		"border":true,
+		"halign": "mid", //可选参数,水平对齐方式
+		"valign": "mid", //可选参数,水平垂直方式
+		"align": "center",
+		"align":"center",
+		"fontcolor": [255,192,192,192]
+	},
+	"label":
+	{
+		"id": "InfoLeftContentText2", //可选参数,控件id
+		"x": -206, //可选参数,控件x坐标,默认为0
+		"y": -12, //可选参数,控件y坐标,默认为0
+		"width": 100, //可选参数,控件宽度,默认为0
+		"height": 38, //可选参数,控件高度,默认为0
+		//"length": 112, 可选参数,控件长度,默认为0 3D控件
+		"border":true,
+		"halign": "mid", //可选参数,水平对齐方式
+		"valign": "mid", //可选参数,水平垂直方式
+		"align": "center",
+		"align":"center",
+		"fontcolor": [255,192,192,192]
+	},
+	"label":
+	{
+		"id": "InfoLeftContentText3", //可选参数,控件id
+		"x": -106, //可选参数,控件x坐标,默认为0
+		"y": -12, //可选参数,控件y坐标,默认为0
+		"width": 100, //可选参数,控件宽度,默认为0
+		"height": 38, //可选参数,控件高度,默认为0
+		//"length": 112, 可选参数,控件长度,默认为0 3D控件
+		"border":true,
+		"halign": "mid", //可选参数,水平对齐方式
+		"valign": "mid", //可选参数,水平垂直方式
+		"align": "center",
+		"align":"center",
+		"fontcolor": [255,192,192,192]
+	},
+	"pushbutton":
+	{
+		"id":"DeleteAcceptButton",
+		"x": -196,
+		"y": 47,
+		"width": 80,
+		"height": 38,
+		"halign": "mid", //可选参数,水平对齐方式
+		"valign": "mid", //可选参数,垂直对齐方式
+		"style":"round",
+		"border": true,
+		"cursorcolor":[255,32,32,32],
+		"pushcolor":[255,32,32,32],
+		"backgroundcolor":[255,64,64,64],
+		"fontcolor": [255,192,192,192],
+		"align":"center",
+		"text":"删除!"
+	},
+	//-----------------------------------
+	"label":
+	{
+		"id": "InfoRightHigherText1", //可选参数,控件id
+		"x": 6, //可选参数,控件x坐标,默认为0
+		"y": -100, //可选参数,控件y坐标,默认为0
+		"width": 152, //可选参数,控件宽度,默认为0
+		"height": 38, //可选参数,控件高度,默认为0
+		//"length": 112, 可选参数,控件长度,默认为0 3D控件
+		"border":false,
+		"halign": "mid", //可选参数,水平对齐方式
+		"valign": "mid", //可选参数,水平垂直方式
+		"align": "center",
+		"text": "未成功预订",
+		"align":"center",
+		"fontcolor": [255,192,192,192]
+	},
+	"label":
+	{
+		"id": "InfoRightTitleText1", //可选参数,控件id
+		"x": 6, //可选参数,控件x坐标,默认为0
+		"y": -56, //可选参数,控件y坐标,默认为0
+		"width": 100, //可选参数,控件宽度,默认为0
+		"height": 38, //可选参数,控件高度,默认为0
+		//"length": 112, 可选参数,控件长度,默认为0 3D控件
+		"border":false,
+		"halign": "mid", //可选参数,水平对齐方式
+		"valign": "mid", //可选参数,水平垂直方式
+		"align": "center",
+		"text": "头等舱",
+		"align":"center",
+		"fontcolor": [255,192,192,192]
+	},
+	"label":
+	{
+		"id": "InfoRightTitleText2", //可选参数,控件id
+		"x": 106, //可选参数,控件x坐标,默认为0
+		"y": -56, //可选参数,控件y坐标,默认为0
+		"width": 100, //可选参数,控件宽度,默认为0
+		"height": 38, //可选参数,控件高度,默认为0
+		//"length": 112, 可选参数,控件长度,默认为0 3D控件
+		"border":false,
+		"halign": "mid", //可选参数,水平对齐方式
+		"valign": "mid", //可选参数,水平垂直方式
+		"align": "center",
+		"text": "商务舱",
+		"align":"center",
+		"fontcolor": [255,192,192,192]
+	},
+	"label":
+	{
+		"id": "InfoRightTitleText3", //可选参数,控件id
+		"x": 206, //可选参数,控件x坐标,默认为0
+		"y": -56, //可选参数,控件y坐标,默认为0
+		"width": 100, //可选参数,控件宽度,默认为0
+		"height": 38, //可选参数,控件高度,默认为0
+		//"length": 112, 可选参数,控件长度,默认为0 3D控件
+		"border":false,
+		"halign": "mid", //可选参数,水平对齐方式
+		"valign": "mid", //可选参数,水平垂直方式
+		"align": "center",
+		"text": "经济舱",
+		"align":"center",
+		"fontcolor": [255,192,192,192]
+	},
+	"label":
+	{
+		"id": "InfoRightContentText1", //可选参数,控件id
+		"x": 6, //可选参数,控件x坐标,默认为0
+		"y": -12, //可选参数,控件y坐标,默认为0
+		"width": 100, //可选参数,控件宽度,默认为0
+		"height": 38, //可选参数,控件高度,默认为0
+		//"length": 112, 可选参数,控件长度,默认为0 3D控件
+		"border":true,
+		"halign": "mid", //可选参数,水平对齐方式
+		"valign": "mid", //可选参数,水平垂直方式
+		"align": "center",
+		"align":"center",
+		"fontcolor": [255,192,192,192]
+	},
+	"label":
+	{
+		"id": "InfoRightContentText2", //可选参数,控件id
+		"x": 106, //可选参数,控件x坐标,默认为0
+		"y": -12, //可选参数,控件y坐标,默认为0
+		"width": 100, //可选参数,控件宽度,默认为0
+		"height": 38, //可选参数,控件高度,默认为0
+		//"length": 112, 可选参数,控件长度,默认为0 3D控件
+		"border":true,
+		"halign": "mid", //可选参数,水平对齐方式
+		"valign": "mid", //可选参数,水平垂直方式
+		"align": "center",
+		"align":"center",
+		"fontcolor": [255,192,192,192]
+	},
+	"label":
+	{
+		"id": "InfoRightContentText3", //可选参数,控件id
+		"x": 206, //可选参数,控件x坐标,默认为0
+		"y": -12, //可选参数,控件y坐标,默认为0
+		"width": 100, //可选参数,控件宽度,默认为0
+		"height": 38, //可选参数,控件高度,默认为0
+		//"length": 112, 可选参数,控件长度,默认为0 3D控件
+		"border":true,
+		"halign": "mid", //可选参数,水平对齐方式
+		"valign": "mid", //可选参数,水平垂直方式
+		"align": "center",
+		"align":"center",
+		"fontcolor": [255,192,192,192]
+	},
+	"pushbutton":
+	{
+		"id":"DeleteRequestingButton",
+		"x": 116,
+		"y": 47,
+		"width": 80,
+		"height": 38,
+		"halign": "mid", //可选参数,水平对齐方式
+		"valign": "mid", //可选参数,垂直对齐方式
+		"style":"round",
+		"border": true,
+		"cursorcolor":[255,32,32,32],
+		"pushcolor":[255,32,32,32],
+		"backgroundcolor":[255,64,64,64],
+		"fontcolor": [255,192,192,192],
+		"align":"center",
+		"text":"删除!"
+	},
+	//-----------------------------------
+
+	//-----------------------------------
+	"pushbutton":
+	{
+		"id":"SwitchToBootUpPage_button",
+		"x": -200,
+		"y": 0,
+		"width": 160,
+		"height": 32,
+		"halign": "right", //可选参数,水平对齐方式
+		"valign": "mid", //可选参数,垂直对齐方式
+		"style":"round",
+		"border": true,
+		"cursorcolor":[255,32,32,32],
+		"pushcolor":[255,32,32,32],
+		"backgroundcolor":[255,64,64,64],
+		"fontcolor": [255,192,192,192],
+		"align":"center",
+		"text":"返回!"
+	}
+}

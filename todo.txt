@@ -1,0 +1,4 @@
+修改Json的文件格式，并实现读入json时完成初始化检查
+
+Segment_Tree Insert
+Segment_Tree Query
