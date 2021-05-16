@@ -5,19 +5,12 @@
 PX_Application App;
 px_int timecounter;
 
-void __cdecl ThreadProcDSI(PX_Application *pApp)
-{
-	Data_Structure_load(pApp);
-	// TODO: Add your thread code here.
-	_endthread();	// 可以省略，隐含会调用。
-}
-
 px_bool PX_ApplicationInitialize(PX_Application *pApp,px_int screen_width,px_int screen_height)
 {
 	timecounter=0;
 	PX_ApplicationInitializeDefault(&pApp->runtime, screen_width, screen_height);
 	PX_Runtime* pRuntime=&pApp->runtime;
-	HANDLE hThread = (HANDLE)_beginthread(ThreadProcDSI, 1, pApp);
+	Data_Structure_load(pApp);
 
 	do
 	{
@@ -52,8 +45,6 @@ px_bool PX_ApplicationInitialize(PX_Application *pApp,px_int screen_width,px_int
 	PX_ObjectSetVisible(pApp->ensure_page_root,0);
 	PX_ObjectSetVisible(pApp->book_successful_root,0);
 
-	WaitForSingleObject(hThread,INFINITE);
-	CloseHandle(hThread);
 	Data_Structure_init(pApp);
 	do
 	{

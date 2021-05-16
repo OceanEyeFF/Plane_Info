@@ -5,10 +5,6 @@
 #include "PainterEngine_Application.h"
 #include "lib.h"
 #include "DS.h"
-#include <Windows.h>
-#include <process.h>
-
-
 
 px_void PX_ApplicationOnStartTimeSelectBarValueChanged(PX_Object *pObject,PX_Object_Event e,px_void *ptr);
 px_void PX_ApplicationOnEndTimeSelectBarValueChanged(PX_Object *pObject,PX_Object_Event e,px_void *ptr);
